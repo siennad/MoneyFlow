@@ -1,0 +1,26 @@
+<mat-card>
+  <form (submit)="onAddBudget(budgetForm)" #budgetForm="ngForm">
+
+    <mat-form-field>
+      <input matInput ngModel placeholder="Your budget" type="number" class="input-right-align" name="amount" #amount="ngModel" required>
+      <span matPrefix>&#8364;&nbsp;&nbsp;</span>
+    </mat-form-field>
+    &nbsp;&nbsp;&nbsp;
+    <mat-form-field>
+      <mat-select ngModel placeholder="Select your period of time" name="period" #period="ngModel" aria-required="true">
+        <mat-option value="oneWeek">One Week</mat-option>
+        <mat-option value="twoWeek">Two Week</mat-option>
+        <mat-option value="oneMonth">One Month</mat-option>
+      </mat-select>
+    </mat-form-field>
+    &nbsp;&nbsp;&nbsp;
+    <button mat-raised-button color="primary" type="submit">Save</button>
+  </form>
+</mat-card>
+
+<div class="result">
+  <p *ngIf="message">
+    {{ message }}
+  </p>
+</div>
+
