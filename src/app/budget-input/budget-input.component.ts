@@ -13,13 +13,16 @@ import { Budget } from '../budget-input/budget.model';
 export class BudgetInputComponent implements OnInit {
   constructor( private expenseService: ExpenseService ) { }
 
+  // value = this.expenseService.getBudgetValue();
+  // period = this.expenseService.getBudgetPeriod();
+  value = this.expenseService.getBudgetValue();
+  period = this.expenseService.getBudgetPeriod();
+  message: any = null;
+
   ngOnInit() {
     // tslint:disable-next-line:prefer-const
-    this.message = this.expenseService.getBudget();
+    this.message = this.expenseService.getBudgetNotify();
   }
-
-  // tslint:disable-next-line:member-ordering
-  message: any = null;
 
   onAddBudget(form: NgForm) {
     if (form.invalid) {
@@ -27,5 +30,7 @@ export class BudgetInputComponent implements OnInit {
     }
     const budget: Budget = { amount: form.value.amount, period: form.value.period};
     this.expenseService.addBudget(budget);
+    this.message = this.expenseService.getBudgetValue();
+    console.log(this.message);
   }
 }
