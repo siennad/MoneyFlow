@@ -1,0 +1,15 @@
+form {
+  margin: auto;
+  width: fit-content;
+  min-width: 90%;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+@media screen and (min-width: 720px) {
+  mat-form-field {
+    width: 32%;
+  }
+}

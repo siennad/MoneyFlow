@@ -1,0 +1,55 @@
+<mat-expansion-panel>
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      Using list
+    </mat-panel-title>
+    <mat-panel-description>
+      Type your expenses
+    </mat-panel-description>
+  </mat-expansion-panel-header>
+
+  <form (submit)="addItem(expenseItem)" #expenseItem="ngForm">
+    <mat-form-field>
+      <input matInput
+      type="text"
+      placeholder="What did you use?"
+      name="name"
+      ngModel
+      #name="ngModel"
+      required >
+      <mat-error *ngIf="name.invalid">Please enter the purpose of this item</mat-error>
+    </mat-form-field>
+
+    &nbsp;
+
+    <mat-form-field>
+        <input matInput
+        type="number"
+        placeholder="How much did you spend?"
+        name="spend"
+        ngModel
+        #spend="ngModel"
+        required >
+        <mat-error *ngIf="spend.invalid">Please enter amount that you paid for this item</mat-error>
+    </mat-form-field>
+
+    &nbsp;
+
+    <mat-form-field>
+      <mat-select ngModel
+        placeholder="Select your category"
+        name="category"
+        #category = "ngModel"
+        aria-required="true">
+        <mat-option *ngFor="let category of categories" [value]="category"> {{category.name}} </mat-option>
+      </mat-select>
+      <mat-error *ngIf="category.invalid">Please choose the category</mat-error>
+    </mat-form-field>
+
+    <p style="text-align: center">
+      <button type="submit" mat-raised-button color="primary">Add Item</button>
+    </p>
+
+  </form>
+
+</mat-expansion-panel>
