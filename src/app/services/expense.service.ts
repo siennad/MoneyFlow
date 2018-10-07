@@ -87,5 +87,8 @@ export class ExpenseService {
     - add func to edit
     - add func to sum by category
     - func to sum all
+    - find by category
+    - find by id
+    - filter
   */
 }

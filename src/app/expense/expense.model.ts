@@ -1,7 +1,7 @@
 import { Category } from './category.model';
 
 export interface Expense {
-  id: number;
+  id: string;
   name: string;
   spend: number;
   category: Category;
