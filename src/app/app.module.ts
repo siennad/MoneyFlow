@@ -16,6 +16,8 @@ import { BudgetInputComponent } from './budget-input/budget-input.component';
 import { ExpenseInputComponent } from './expense/expense-input/expense-input.component';
 import { MainPageComponent } from './main-page/main-page.component';
 import { ExpenseListComponent } from './expense/expense-list/expense-list.component';
+import { HeaderComponent } from './ui/header/header.component';
+import { FooterComponent } from './ui/footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +25,9 @@ import { ExpenseListComponent } from './expense/expense-list/expense-list.compon
     BudgetInputComponent,
     ExpenseInputComponent,
     MainPageComponent,
-    ExpenseListComponent
+    ExpenseListComponent,
+    HeaderComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule, BrowserAnimationsModule,
