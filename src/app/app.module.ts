@@ -18,6 +18,7 @@ import { MainPageComponent } from './main-page/main-page.component';
 import { ExpenseListComponent } from './expense/expense-list/expense-list.component';
 import { HeaderComponent } from './ui/header/header.component';
 import { FooterComponent } from './ui/footer/footer.component';
+import { SidebarComponent } from './ui/sidebar/sidebar.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { FooterComponent } from './ui/footer/footer.component';
     MainPageComponent,
     ExpenseListComponent,
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
+    SidebarComponent
   ],
   imports: [
     BrowserModule, BrowserAnimationsModule,
