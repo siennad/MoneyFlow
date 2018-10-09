@@ -10,6 +10,6 @@ mat-form-field {
 
 @media screen and (min-width: 720px) {
   mat-form-field {
-    width: 32%;
+    width: 45%;
   }
 }

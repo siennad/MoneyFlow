@@ -11,9 +11,11 @@ export class ExpenseListComponent implements OnInit {
   constructor(public expenseService: ExpenseService) { }
 
   list;
+  length;
 
   ngOnInit() {
     this.list = this.expenseService.getExpenseList();
+    this.length = this.list.length;
   }
 
 }

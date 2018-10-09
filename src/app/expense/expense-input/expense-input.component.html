@@ -8,7 +8,7 @@
     </mat-panel-description>
   </mat-expansion-panel-header>
 
-  <form (submit)="addItem(expenseItem)" #expenseItem="ngForm">
+  <form (submit)="addItem(expenseItem)" #expenseItem="ngForm" *ngIf="formDisabled == true">
     <mat-form-field>
       <input matInput
       type="text"
@@ -33,17 +33,36 @@
         <mat-error *ngIf="spend.invalid">Please enter amount that you paid for this item</mat-error>
     </mat-form-field>
 
-    &nbsp;
+    <br>
 
     <mat-form-field>
       <mat-select ngModel
         placeholder="Select your category"
         name="category"
         #category = "ngModel"
+        required
         aria-required="true">
         <mat-option *ngFor="let category of categories" [value]="category"> {{category.name}} </mat-option>
       </mat-select>
       <mat-error *ngIf="category.invalid">Please choose the category</mat-error>
+    </mat-form-field>
+
+    &nbsp;
+
+    <mat-form-field color="primary">
+      <input matInput
+      [matDatepicker]="date"
+      placeholder="Choose a date"
+      name="date"
+      min="minDay"
+      max="maxDay"
+      ngModel
+      required
+      aria-required="true"
+      #date="ngModel"
+      [value]="date">
+      <mat-datepicker-toggle matSuffix [for]="date"></mat-datepicker-toggle>
+      <mat-datepicker touchUI #date color="primary"></mat-datepicker>
     </mat-form-field>
 
     <p style="text-align: center">

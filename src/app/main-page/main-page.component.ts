@@ -8,8 +8,9 @@ import { Component, OnInit } from '@angular/core';
 export class MainPageComponent implements OnInit {
 
   constructor() { }
-
+  date;
   ngOnInit() {
+    this.date = new Date();
   }
 
 }

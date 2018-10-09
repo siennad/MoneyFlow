@@ -3,6 +3,7 @@ import { MatSnackBar } from '@angular/material';
 import { Budget } from '../budget-input/budget.model';
 import { Expense } from '../expense/expense.model';
 import { SESSION_STORAGE, StorageService } from 'angular-webstorage-service';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -14,11 +15,15 @@ export class ExpenseService {
 
   expenseList: Expense[] = [];
 
+  // below to anounce that budget has been inputted so that the expense form available
+  public budgetInput: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this.hasBudget());
+
   addBudget(budget: Budget) {
     // TODO now save to local storage, later save to server database
     this.storage.set('budget', budget);
     this.getBudgetValue();
     this.notify('Budget added successfully!');
+    this.budgetInput.next(true);
   }
 
   getBudgetNotify(): Budget | string {
@@ -37,23 +42,27 @@ export class ExpenseService {
 
   getBudgetValue(): number {
     const budget = this.getBudget();
-    return budget.amount;
+    return (budget == null) ? null : budget.amount;
   }
 
   getBudgetPeriod(): string {
     const budget = this.getBudget();
-    return budget.period;
+    return (budget == null) ? null : budget.period;
   }
 
   getBudget(): Budget {
     if (this.storage.get('budget') == null ) {
       // tslint:disable-next-line:prefer-const
-      return;
+      return null;
     } else {
       // tslint:disable-next-line:prefer-const
       let budget = JSON.parse(JSON.stringify(this.storage.get('budget')));
       return budget;
     }
+  }
+
+  hasBudget(): boolean {
+    return (this.getBudget() == null) ? false : true;
   }
 
   addExpenseItem(item: Expense) {

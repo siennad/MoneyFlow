@@ -32,5 +32,6 @@ export class BudgetInputComponent implements OnInit {
     this.expenseService.addBudget(budget);
     this.message = this.expenseService.getBudgetValue();
     console.log(this.message);
+    this.expenseService.budgetInput.next(this.expenseService.hasBudget());
   }
 }

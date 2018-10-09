@@ -7,8 +7,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { StorageServiceModule } from 'angular-webstorage-service';
 
 import {  MatInputModule, MatSelectModule, MatSnackBarModule,
-          MatCardModule, MatButtonModule,
-          MatToolbarModule, MatExpansionModule } from '@angular/material';
+          MatCardModule, MatButtonModule, MatDatepickerModule,
+          MatToolbarModule, MatExpansionModule, MatPaginatorModule, MatNativeDateModule } from '@angular/material';
+import { MatSortModule } from '@angular/material/sort';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -29,15 +30,16 @@ import { SidebarComponent } from './ui/sidebar/sidebar.component';
     ExpenseListComponent,
     HeaderComponent,
     FooterComponent,
-    SidebarComponent
+    SidebarComponent,
   ],
   imports: [
     BrowserModule, BrowserAnimationsModule,
     FormsModule, ReactiveFormsModule,
     AppRoutingModule,
-    MatInputModule, MatSnackBarModule,
-    MatCardModule, MatSelectModule,
+    MatInputModule, MatSnackBarModule, MatPaginatorModule,
+    MatCardModule, MatSelectModule, MatSortModule,
     MatButtonModule, MatToolbarModule, MatExpansionModule,
+    MatDatepickerModule, MatNativeDateModule,
     // temporary stuffs added here
     StorageServiceModule
   ],
