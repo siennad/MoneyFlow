@@ -37,12 +37,12 @@ export class ExpenseService {
 
   getBudgetValue(): number {
     const budget = this.getBudget();
-    return budget.amount;
+    return (budget == null) ? null :  budget.amount;
   }
 
   getBudgetPeriod(): string {
     const budget = this.getBudget();
-    return budget.period;
+    return (budget == null) ? null :  budget.period;
   }
 
   getBudget(): Budget {
