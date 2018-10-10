@@ -8,7 +8,11 @@ import { StorageServiceModule } from 'angular-webstorage-service';
 
 import {  MatInputModule, MatSelectModule, MatSnackBarModule,
           MatCardModule, MatButtonModule, MatDatepickerModule,
-          MatToolbarModule, MatExpansionModule, MatPaginatorModule, MatNativeDateModule } from '@angular/material';
+          MatToolbarModule, MatExpansionModule, MatPaginatorModule,
+          MatTableModule,
+          MatNativeDateModule, MatHeaderRowDef,
+          MatSortHeader, MatRow, MatRowDef,  MatCell, MatCellDef,
+    } from '@angular/material';
 import { MatSortModule } from '@angular/material/sort';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -20,6 +24,7 @@ import { ExpenseListComponent } from './expense/expense-list/expense-list.compon
 import { HeaderComponent } from './ui/header/header.component';
 import { FooterComponent } from './ui/footer/footer.component';
 import { SidebarComponent } from './ui/sidebar/sidebar.component';
+import { ExpenseTrackingComponent } from './expense/expense-tracking/expense-tracking.component';
 
 @NgModule({
   declarations: [
@@ -31,15 +36,17 @@ import { SidebarComponent } from './ui/sidebar/sidebar.component';
     HeaderComponent,
     FooterComponent,
     SidebarComponent,
+    ExpenseTrackingComponent,
   ],
   imports: [
     BrowserModule, BrowserAnimationsModule,
     FormsModule, ReactiveFormsModule,
     AppRoutingModule,
+    // Mat
     MatInputModule, MatSnackBarModule, MatPaginatorModule,
     MatCardModule, MatSelectModule, MatSortModule,
     MatButtonModule, MatToolbarModule, MatExpansionModule,
-    MatDatepickerModule, MatNativeDateModule,
+    MatDatepickerModule, MatNativeDateModule, MatTableModule,
     // temporary stuffs added here
     StorageServiceModule
   ],

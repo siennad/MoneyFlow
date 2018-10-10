@@ -13,9 +13,9 @@ export class ExpenseInputComponent implements OnInit {
 
   constructor( private expenseService: ExpenseService ) {
     this.expenseService.budgetInput.subscribe(value => {
-      console.log(value);
+      // console.log(value);
       this.formDisabled = value;
-      console.log(this.formDisabled);
+      // console.log(this.formDisabled);
     });
   }
   info: any = null;

@@ -28,7 +28,7 @@ export class BudgetInputComponent implements OnInit {
     if (form.invalid) {
       return;
     }
-    const budget: Budget = { amount: form.value.amount, period: form.value.period};
+    const budget: Budget = { amount: form.value.amount, period: form.value.period, date: new Date()};
     this.expenseService.addBudget(budget);
     this.message = this.expenseService.getBudgetValue();
     console.log(this.message);
