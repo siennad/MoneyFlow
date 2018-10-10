@@ -77,12 +77,13 @@ export class ExpenseService {
     const budget = this.getBudget();
     const period = this.getBudgetPeriod();
     // tslint:disable-next-line:prefer-const
-    let days = (period == null) ? null : this.differentBtwDate(new Date(), budget.date);
+    let days = (budget == null) ?
+        null : this.differentBtwDate(new Date(), new Date(budget.date));
     let remainDays = 0;
     let message = '';
     if ( (days != null) ) {
       switch (period) {
-        case 'OneWeek': {
+        case 'oneWeek': {
           remainDays = 7 - days;
           if ( remainDays > 0 ) {
             message = 'You have ' + remainDays + ' days left.';
@@ -93,7 +94,7 @@ export class ExpenseService {
           }
           break;
         }
-        case 'TwoWeek': {
+        case 'twoWeek': {
           remainDays = 14 - days;
           if ( remainDays > 0 ) {
             message = 'You have ' + remainDays + ' days left.';
@@ -104,7 +105,7 @@ export class ExpenseService {
           }
           break;
         }
-        case 'OneMonth': {
+        case 'oneMonth': {
           remainDays = 30 - days;
           if ( remainDays > 0 ) {
             message = 'You have ' + remainDays + ' days left.';
@@ -123,16 +124,21 @@ export class ExpenseService {
     } else {
       message = 'You haven\'t set your budget';
     }
+    console.log({remainDays: remainDays, message: message});
 
     return {remainDays: remainDays, message: message};
   }
 
-  getBudgetRemain() {
+  getBudgetRemain(list) {
     const budget = this.getBudget();
     const budgetAmount = this.getBudgetValue();
-    const sum = this.sum(this.expenseList);
     let remainValue = 0;
     let message = '';
+
+    if ( list == null ) {
+      message = 'You haven\'t had any items yet!';
+    }
+    const sum = this.sum(list);
 
     if (budgetAmount === null) {
       message = 'You haven\'t set your budget value';
@@ -150,7 +156,7 @@ export class ExpenseService {
         message = 'You have 0 item in list';
       }
     }
-
+    return {remainValue: remainValue, message: message};
   }
 
   addExpenseItem(item: Expense) {
@@ -179,11 +185,15 @@ export class ExpenseService {
 
   // Return in expense list
   getExpenseList() {
-   this.storage.get('expenseList').map( data => {
-      this.expenseList.push(data);
-    });
-    this.listUpdate.next([...this.expenseList]);
-    return [...this.expenseList];
+    if (this.storage.get('expenseList') != null ) {
+      this.storage.get('expenseList').map( data => {
+        this.expenseList.push(data);
+      });
+      this.listUpdate.next([...this.expenseList]);
+      return [...this.expenseList];
+    } else {
+      return null;
+    }
   }
 
   getListUpdateListener() {
@@ -206,11 +216,13 @@ export class ExpenseService {
   */
 
   sum(list) {
-    const total = list.length;
+    const total = (list != null) ? list.length : 0;
     let totalSpend = 0;
-    list.forEach(element => {
-      totalSpend += element.spend;
-    });
+    if (list != null) {
+      list.forEach(element => {
+        totalSpend += element.spend;
+      });
+    }
     const sum: {total: number; totalSpend: number} = {total: total, totalSpend: totalSpend};
     return  sum;
   }
