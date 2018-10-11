@@ -20,6 +20,8 @@ import { HeaderComponent } from './ui/header/header.component';
 import { FooterComponent } from './ui/footer/footer.component';
 import { SidebarComponent } from './ui/sidebar/sidebar.component';
 
+
+
 @NgModule({
   declarations: [
     AppComponent,
