@@ -25,11 +25,14 @@ export class BudgetInputComponent implements OnInit {
   }
 
   onAddBudget(form: NgForm) {
+    const id = ((new Date().getMonth() + 1).toString()) + ((new Date().getDate()).toString()) + form.value.period;
     if (form.invalid) {
       return;
     }
-    const budget: Budget = { amount: form.value.amount, period: form.value.period, date: new Date()};
+    const budget: Budget = { id: id, userId: 1, amount: form.value.amount, period: form.value.period, date: new Date()};
     this.expenseService.addBudget(budget);
+    console.log(budget);
+
     this.message = this.expenseService.getBudgetValue();
     console.log(this.message);
     this.expenseService.budgetInput.next(this.expenseService.hasBudget());

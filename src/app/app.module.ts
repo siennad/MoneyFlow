@@ -25,8 +25,7 @@ import { HeaderComponent } from './ui/header/header.component';
 import { FooterComponent } from './ui/footer/footer.component';
 import { SidebarComponent } from './ui/sidebar/sidebar.component';
 import { ExpenseTrackingComponent } from './expense/expense-tracking/expense-tracking.component';
-
-
+import { LoginComponent } from './user/login/login.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +38,7 @@ import { ExpenseTrackingComponent } from './expense/expense-tracking/expense-tra
     FooterComponent,
     SidebarComponent,
     ExpenseTrackingComponent,
+    LoginComponent,
   ],
   imports: [
     BrowserModule, BrowserAnimationsModule,

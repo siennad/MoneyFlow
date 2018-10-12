@@ -51,6 +51,11 @@ export class ExpenseService {
     return (budget == null) ? null : budget.period;
   }
 
+  getBudgetId(): string {
+    const budget = this.getBudget();
+    return (budget == null) ? null : budget.id;
+  }
+
   getBudget(): Budget {
     if (this.storage.get('budget') == null ) {
       // tslint:disable-next-line:prefer-const

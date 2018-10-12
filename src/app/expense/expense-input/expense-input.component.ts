@@ -44,8 +44,14 @@ export class ExpenseInputComponent implements OnInit {
     // tslint:disable-next-line:prefer-const
     let ID = '_' + Math.random().toString(36).substr(2, 9);
     console.log(form.value.date);
+
+    // TODO userid is mock
     const expense: Expense = {id: ID, name: form.value.name,
-      spend: form.value.spend, category: form.value.category, date: form.value.date };
+      spend: form.value.spend, category: form.value.category, date: form.value.date,
+      userId: 1, budgetId: this.expenseService.getBudgetId() };
+
+    console.log(expense);
+
     this.expenseService.addExpenseItem( expense );
     this.info = { name: form.value.name,
       spend: form.value.spend, category: form.value.category };
