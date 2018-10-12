@@ -26,6 +26,7 @@ import { FooterComponent } from './ui/footer/footer.component';
 import { SidebarComponent } from './ui/sidebar/sidebar.component';
 import { ExpenseTrackingComponent } from './expense/expense-tracking/expense-tracking.component';
 import { LoginComponent } from './user/login/login.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { LoginComponent } from './user/login/login.component';
     SidebarComponent,
     ExpenseTrackingComponent,
     LoginComponent,
+    PageNotFoundComponent,
   ],
   imports: [
     BrowserModule, BrowserAnimationsModule,

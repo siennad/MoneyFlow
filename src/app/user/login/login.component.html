@@ -1,3 +1,3 @@
-<p>
-  login works!
-</p>
+<form id="loginForm" #loginForm="ngForm" (submit)="login(loginForm)">
+  <button type="submit" class="btn btn-primary">Login</button>
+</form>

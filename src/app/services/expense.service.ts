@@ -18,12 +18,15 @@ export class ExpenseService {
 
   // below to anounce that budget has been inputted so that the expense form available
   public budgetInput: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this.hasBudget());
+  public budget;
 
   addBudget(budget: Budget) {
     // TODO now save to local storage, later save to server database
     this.storage.set('budget', budget);
     this.getBudgetValue();
     this.notify('Budget added successfully!');
+
+    // SUB subcription for changing
     this.budgetInput.next(true);
   }
 
@@ -179,6 +182,7 @@ export class ExpenseService {
       this.notify(e);
     } */
     this.expenseList.push(item);
+    // SUB subcription for changing
     this.listUpdate.next([...this.expenseList]);
 
     // tslint:disable-next-line:prefer-const
@@ -190,10 +194,13 @@ export class ExpenseService {
 
   // Return in expense list
   getExpenseList() {
+
     if (this.storage.get('expenseList') != null ) {
+      // get data from local storage. change to server
       this.storage.get('expenseList').map( data => {
         this.expenseList.push(data);
       });
+      // SUB subcription for changing
       this.listUpdate.next([...this.expenseList]);
       return [...this.expenseList];
     } else {
