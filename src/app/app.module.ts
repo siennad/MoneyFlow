@@ -26,6 +26,8 @@ import { FooterComponent } from './ui/footer/footer.component';
 import { SidebarComponent } from './ui/sidebar/sidebar.component';
 import { ExpenseTrackingComponent } from './expense/expense-tracking/expense-tracking.component';
 
+
+
 @NgModule({
   declarations: [
     AppComponent,
