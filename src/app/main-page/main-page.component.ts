@@ -9,12 +9,12 @@ import { Router } from '@angular/router';
 })
 export class MainPageComponent implements OnInit {
 
-  constructor(private userService: UserService, private router: Router) { 
+  constructor(private userService: UserService, private router: Router) {
     this.userService.loginStatus.subscribe( value => {
-      if (value == false) {
-        this.router.navigate([''])
+      if (value === false) {
+        this.router.navigate(['login']);
       }
-    })
+    });
   }
   ngOnInit() {
   }

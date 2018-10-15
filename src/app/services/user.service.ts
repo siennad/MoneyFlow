@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { delay, tap } from 'rxjs/operators';
+import { delay, tap, map } from 'rxjs/operators';
+import { Http, RequestOptions, Headers } from '@angular/http';
 
 @Injectable({
   providedIn: 'root'
@@ -10,11 +11,12 @@ export class UserService {
   public loginStatus: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this.getLoginStatus());
 
   public loggedIn = false;
-  constructor() { }
+  constructor(private http: Http) { }
 
-  userLogin() {
+  userLogin(user) {
     this.loggedIn = true;
-    this.loginStatus.next(true);  
+    this.loginStatus.next(true);
+    this.verifyUser(user);
   }
 
   userLogout() {
@@ -24,5 +26,19 @@ export class UserService {
 
   getLoginStatus() {
     return this.loggedIn;
+  }
+
+  addUser(user) {
+    const headers = new Headers({'Content-Type': 'application/json'});
+    const options = new RequestOptions({headers: headers});
+    return this.http.post('/api/user/add', user, options)
+    .pipe(map(res => res.json()));
+  }
+
+  verifyUser(user) {
+    const headers = new Headers({'contentType': 'application/json'});
+    const options = new RequestOptions({headers: headers});
+    return this.http.post('/api/user/verify', user, options)
+    .pipe(map(res => res.json()));
   }
 }

@@ -9,10 +9,10 @@ import { UserService } from '../../services/user.service';
 export class HeaderComponent implements OnInit {
 
   loginStatus;
-  constructor( private userService: UserService ) { 
+  constructor( private userService: UserService ) {
     this.userService.loginStatus.subscribe( value => {
       this.loginStatus = value;
-    })
+    });
   }
 
   ngOnInit() {}
