@@ -1,47 +1,34 @@
 var express = require("express");
-var path = require("path");
 var bodyParser = require("body-parser");
-const mongoose = require('mongoose');
-const cors = require('cors');
-const password_hash = require('password-hash');
-var jwt = require('jsonwebtoken');
+var path = require("path");
 
+//const cors = require('cors');
+//const password_hash = require('password-hash');
+//var jwt = require('jsonwebtoken');
+
+const api = require('./backend/api');
 const app = express();
 
-const router = express.Router();
-
-const route = require('./backend/app.js');
-
-const User = require('./backend/models/user');
-const Budget = require('./backend/models/budget');
-const Expense = require('./backend/models/expense');
-
-mongoose.connect('mongodb://ducle94:tmgs8647@ds052978.mlab.com:52978/moneyflow');
-mongoose.connection.on('connected', () => {
-    console.log('connected to database MongoDB');
-});
-mongoose.connection.on('error', (err) => {
-    if (err) {
-        console.log('Error in database connection: ' + err);
-    }
-});
-
-app.use(cors());
+app.use('/api', api);
+//app.use(cors());
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+//app.use(bodyParser.urlencoded({ extended: true }));
+
 
 // testing server
 app.get('/hello', function(req, res) {
     res.send('<h1> Hello there, I am working! </h1>');
 });
 
+
 app.listen(3000, function() {
     console.log('Server running on port 3000...');
 })
 
-// api-route
 
+//
+/*
 //add-user
 router.post('/api/user/add', (req, res) => {
     let pwd = password_hash.generate(req.body.password);
@@ -127,3 +114,4 @@ router.get('/api/user', (req, res) => {
         }
     }).select('-password_hash');
 });
+*/

@@ -1,20 +1,12 @@
 const mongoose = require('mongoose');
 
-const UserSchema = mongoose.Schema({
-    name: {
-        type: String,
-        required: true
-    },
-    email: {
-        type: String,
-        required: true,
-        unique: true
-    },
-    password_hash: {
-        type: String,
-        required: true
-    },
-}, {
+var Schema = mongoose.Schema;
+const UserSchema = new Schema({
+        name: String,
+        email: String,
+        password: String,
+    }
+    /*, {
     toJSON: { virtuals: true },
     toObject: { virtuals: true }
 });
@@ -27,6 +19,7 @@ UserSchema.virtual('expenses', {
     ref: 'Expense',
     localField: '_id',
     foreignField: 'userId',
-})
+}*/
+);
 
-const User = module.exports = mongoose.model('User', UserSchema);
+module.exports = mongoose.model('User', UserSchema, 'users');
