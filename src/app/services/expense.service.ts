@@ -133,7 +133,6 @@ export class ExpenseService {
     } else {
       message = 'You haven\'t set your budget';
     }
-    console.log({remainDays: remainDays, message: message});
 
     return {remainDays: remainDays, message: message};
   }
@@ -184,10 +183,6 @@ export class ExpenseService {
       console.error(e);
       this.notify(e);
     } */
-    console.log(this.expenseList);
-    console.log(this.listUpdate);
-
-
     this.expenseList.push(item);
     // SUB subcription for changing
     this.listUpdate.next([...this.expenseList]);
@@ -196,9 +191,6 @@ export class ExpenseService {
     let currentExpenseList = this.storage.get('expenseList') || [];
     currentExpenseList.push(item);
     this.storage.set('expenseList', this.expenseList);
-    console.log(this.expenseList);
-    console.log(this.listUpdate);
-
   }
 
   // Return in expense list
