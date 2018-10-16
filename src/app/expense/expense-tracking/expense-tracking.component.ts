@@ -21,9 +21,13 @@ export class ExpenseTrackingComponent implements OnInit {
       this.timeTracking = this.expenseService.getBudgetRemainDay();
       this.budgetTracking = this.expenseService.getBudgetRemain(this.expenselist);
     });
-    //ENDSUB
+
+    // ENDSUB
+
+    this.categorize = this.expenseService.divideExpenseByCategory();
   }
 
+  categorize;
   date;
   listSub: Subscription;
   budgetTracking;
@@ -32,11 +36,8 @@ export class ExpenseTrackingComponent implements OnInit {
 
   ngOnInit() {
     this.date = new Date();
-    this.timeTracking = this.expenseService.getBudgetRemainDay();
     this.expenselist = this.expenseService.getExpenseList();
-    this.budgetTracking = this.expenseService.getBudgetRemain(this.expenselist);
-    console.log(this.timeTracking);
-    console.log(this.budgetTracking);
+    console.log(this.categorize);
 
   }
 
