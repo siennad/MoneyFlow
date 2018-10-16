@@ -14,19 +14,14 @@ export class UserService {
   public loginStatus: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this.getLoginStatus());
 
   public loggedIn = false;
-  constructor(private http: HttpClient) { }
-
-  userLogin(user) {
-    return localStorage.getItem('token') != null;
-    this.loggedIn = true;
-    this.loginStatus.next(true);
-    this.verifyUser(user);
-  }
+  constructor(private http: HttpClient, ) { }
 
   userLogout() {
     this.loggedIn = false;
     this.loginStatus.next(false);
-    return localStorage.deleteItem('token');
+    console.log(localStorage.getItem('token'));
+
+    localStorage.removeItem('token');
   }
 
   getLoginStatus() {
