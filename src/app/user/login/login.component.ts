@@ -9,25 +9,33 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  
 
-  constructor(private userService: UserService, private router: Router) { 
+  constructor(private userService: UserService, private router: Router) {
     this.userService.loginStatus.subscribe( value => {
-      if (value == true) {
-        this.router.navigate(['home'])
+      if (value === true) {
+        this.router.navigate(['home']);
       }
-    })
+    });
   }
 
   ngOnInit() {
   }
 
   login(form: NgForm) {
-    // TODO: check for user info correct
-    // if true call func below => to set user login so it will redirect to homepage
-    this.userService.userLogin();
-    // If false
-    // Alert ('Invalid email/password')
-  }  
+    const user = {
+      email: form.value.email ,
+      password: form.value.password ,
+    };
 
+    console.log(user);
+    this.userService.verifyUser(user)
+    .subscribe(
+      res => {
+        console.log(res);
+        localStorage.setItem('token', res.token);
+        this.userService.loginStatus.next(true);
+      },
+      err => console.log(err)
+    );
+  }
 }
