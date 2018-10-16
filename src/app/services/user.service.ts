@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { delay, tap, map } from 'rxjs/operators';
-import { Http, RequestOptions, Headers } from '@angular/http';
+import { RequestOptions, Headers } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
+/*import { HttpInterceptor } from '@angular/common/http';*/
+import { User } from '../user/user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -11,9 +14,10 @@ export class UserService {
   public loginStatus: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this.getLoginStatus());
 
   public loggedIn = false;
-  constructor(private http: Http) { }
+  constructor(private http: HttpClient) { }
 
   userLogin(user) {
+    //return localStorage.getItem('token') != null;
     this.loggedIn = true;
     this.loginStatus.next(true);
     this.verifyUser(user);
@@ -31,14 +35,12 @@ export class UserService {
   addUser(user) {
     const headers = new Headers({'Content-Type': 'application/json'});
     const options = new RequestOptions({headers: headers});
-    return this.http.post('/api/user/add', user, options)
-    .pipe(map(res => res.json()));
+    return this.http.post<any>('http://localhost:8080/api/user/add', user);
   }
 
   verifyUser(user) {
     const headers = new Headers({'contentType': 'application/json'});
     const options = new RequestOptions({headers: headers});
-    return this.http.post('/api/user/verify', user, options)
-    .pipe(map(res => res.json()));
+    return this.http.post<any>('http://localhost:8080/api/user/verify', user);
   }
 }

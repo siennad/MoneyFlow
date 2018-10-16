@@ -1,11 +1,12 @@
 const mongoose = require('mongoose');
 
-var Schema = mongoose.Schema;
+const Schema = mongoose.Schema;
 const UserSchema = new Schema({
-        name: String,
-        email: String,
-        password: String,
-    }
+    name: String,
+    email: String,
+    password: String,
+    //budget: [{ type: Schema.Types.ObjectId, ref: 'Budget' }]
+
     /*, {
     toJSON: { virtuals: true },
     toObject: { virtuals: true }
@@ -20,6 +21,6 @@ UserSchema.virtual('expenses', {
     localField: '_id',
     foreignField: 'userId',
 }*/
-);
+});
 
 module.exports = mongoose.model('User', UserSchema, 'users');

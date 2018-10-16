@@ -10,9 +10,6 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent implements OnInit {
 
-  email = 'aaa@g.com';
-  password = 'AAAA1234';
-
   constructor(private userService: UserService, private router: Router) {
     this.userService.loginStatus.subscribe( value => {
       if (value === true) {
@@ -31,16 +28,14 @@ export class LoginComponent implements OnInit {
     };
 
     console.log(user);
-    this.userService.userLogin(user);
-
-    // TODO: check for user info correct
-    if ( user.email === this.email && user.password === this.password ) {
-      this.userService.userLogin(user);
-    } else {
-      console.log('Invalid user!');
-    }
+    this.userService.verifyUser(user)
+    .subscribe(
+      res => {
+        console.log(res);
+        localStorage.setItem('token', res.token);
+        this.userService.loginStatus.next(true);
+      },
+      err => console.log(err)
+    );
   }
-    // if true call func below => to set user login so it will redirect to homepage
-
-    // Alert ('Invalid email/password')
 }

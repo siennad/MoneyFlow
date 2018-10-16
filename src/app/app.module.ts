@@ -3,6 +3,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 // tobe deleted later when adding to server
 import { StorageServiceModule } from 'angular-webstorage-service';
 
@@ -47,7 +48,7 @@ import { RegisterComponent } from './user/register/register.component';
   imports: [
     BrowserModule, BrowserAnimationsModule,
     FormsModule, ReactiveFormsModule,
-    AppRoutingModule, HttpModule,
+    AppRoutingModule, HttpModule, HttpClientModule,
     // Mat
     MatInputModule, MatSnackBarModule, MatPaginatorModule,
     MatCardModule, MatSelectModule, MatSortModule,

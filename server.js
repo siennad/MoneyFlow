@@ -2,19 +2,20 @@ var express = require("express");
 var bodyParser = require("body-parser");
 var path = require("path");
 
-//const cors = require('cors');
+const cors = require('cors');
 //const password_hash = require('password-hash');
-//var jwt = require('jsonwebtoken');
 
 const api = require('./backend/api');
 const app = express();
 
-app.use('/api', api);
-//app.use(cors());
+app.use(cors());
+
+app.use(express.static(path.join(__dirname, 'dist')));
 
 app.use(bodyParser.json());
-//app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(bodyParser.urlencoded({ extended: true }));
 
+app.use('/api', api);
 
 // testing server
 app.get('/hello', function(req, res) {
@@ -22,8 +23,8 @@ app.get('/hello', function(req, res) {
 });
 
 
-app.listen(3000, function() {
-    console.log('Server running on port 3000...');
+app.listen(8080, function() {
+    console.log('Server running on port 8080...');
 })
 
 
@@ -113,5 +114,4 @@ router.get('/api/user', (req, res) => {
             res.json({ success: false, msg: "Invalid user", data: [] });
         }
     }).select('-password_hash');
-});
-*/
+}); */

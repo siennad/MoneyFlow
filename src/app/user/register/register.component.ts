@@ -1,6 +1,7 @@
 import { UserService } from './../../services/user.service';
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -9,7 +10,14 @@ import { NgForm } from '@angular/forms';
 })
 export class RegisterComponent implements OnInit {
 
-  constructor( private userService: UserService) { }
+  constructor( private userService: UserService, private router: Router) {
+    this.userService.loginStatus.subscribe( value => {
+      if (value === true) {
+        this.router.navigate(['home']);
+      }
+    });
+
+  }
 
   ngOnInit() {
   }
@@ -22,10 +30,13 @@ export class RegisterComponent implements OnInit {
     };
 
     this.userService.addUser(newUser)
-      .subscribe( user => {
-        if (user.success) {
-          this.userService.loginStatus.next(true);
-        }
+      .subscribe( res => {
+        console.log(res);
+        localStorage.setItem('token', res.token);
+        this.userService.loginStatus.next(true);
+      },
+      err => {
+        console.log(err);
       });
 
   }

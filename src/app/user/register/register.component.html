@@ -1,7 +1,7 @@
 <form id="signupForm" #signupForm="ngForm" (submit)="signup(signupForm)">
-    <div class="card mt-5" style="margin:auto;width: 600px;">
+    <div class="card mt-5" style="margin:auto;max-width: 600px;">
         <div class="card-body">
-            <h5 class="card-title">Login</h5>
+            <h5 class="card-title">Register</h5>
             <div class="form-group">
                 <label for="name">Name</label>
                 <input matInput type="text" class="form-control" id="name" placeholder="Name" name="name" ngModel #name="ngModel" required>
