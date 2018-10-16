@@ -5,7 +5,7 @@ const UserSchema = new Schema({
     name: String,
     email: String,
     password: String,
-    //budget: [{ type: Schema.Types.ObjectId, ref: 'Budget' }]
+    budget: [{ type: Schema.Types.ObjectId, ref: 'Budget' }]
 
     /*, {
     toJSON: { virtuals: true },
@@ -24,3 +24,5 @@ UserSchema.virtual('expenses', {
 });
 
 module.exports = mongoose.model('User', UserSchema, 'users');
+
+//Query find budget by id

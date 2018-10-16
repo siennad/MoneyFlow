@@ -17,7 +17,7 @@ export class UserService {
   constructor(private http: HttpClient) { }
 
   userLogin(user) {
-    //return localStorage.getItem('token') != null;
+    return localStorage.getItem('token') != null;
     this.loggedIn = true;
     this.loginStatus.next(true);
     this.verifyUser(user);
@@ -26,6 +26,7 @@ export class UserService {
   userLogout() {
     this.loggedIn = false;
     this.loginStatus.next(false);
+    return localStorage.deleteItem('token');
   }
 
   getLoginStatus() {

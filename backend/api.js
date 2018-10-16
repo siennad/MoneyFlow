@@ -58,23 +58,17 @@ router.post('/user/verify', (req, res) => {
     })
 });
 
-/*
-// jwt middleware to verify token
-router.use((req, res, next) => {
-    var token = req.body.token || req.headers['token'];
-    if (token) {
-        jwt.verify(token, 'adipixel-secret', (err, decoded) => {
-            if (err) {
-                return res.json({ success: false, msg: 'Token not valid or expired', data: [] });
-            } else {
-                req.decoded = decoded;
-                next();
-            }
-        });
-    } else {
-        return res.status(403).json({ success: false, msg: 'No token provided', data: [] });
-    }
+//add-budget
+router.post('/budget/add', (req, res) => {
+    let budgetData = req.body
+    let budget = new Budget(budgetData)
+    budget.save((err, addedBudget) => {
+        if (err) {
+            console.log(err);
+        } else {
+            res.status(200).send(addedBudget);
+        }
+    });
 });
-*/
 
 module.exports = router;
