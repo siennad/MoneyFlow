@@ -1,10 +1,10 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose'),
+    Schema = mongoose.Schema;
+
+const Budget = require('./budget');
 
 const ExpenseSchema = mongoose.Schema({
-    _id: {
-        type: String,
-        required: true,
-    },
+    _id: Schema.Types.ObjectId,
     userId: {
         type: mongoose.Schema.ObjectId,
         ref: 'User',
@@ -30,7 +30,8 @@ const ExpenseSchema = mongoose.Schema({
         required: true,
         default: Date.now
     },
+    budget: { type: Schema.Types.ObjectId, ref: 'Budget', childPath: 'expenseList' }
 
 });
 
-const Expense = module.exports = mongoose.model('Expense', ExpenseSchema);
+module.exports = mongoose.model('Expense', ExpenseSchema, 'expenses');

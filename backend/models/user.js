@@ -1,27 +1,29 @@
 const mongoose = require('mongoose');
 
+delete mongoose.connection.models['User']
+
+const Budget = require('./budget');
+
 const Schema = mongoose.Schema;
 const UserSchema = new Schema({
-    name: String,
-    email: String,
-    password: String,
-    budget: [{ type: Schema.Types.ObjectId, ref: 'Budget' }]
+    name: { type: String, require: true },
+    email: { type: String, unique: true, require: true },
+    password: { type: String, require: true },
+    budget: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Budget',
+    }],
 
-    /*, {
+}, {
     toJSON: { virtuals: true },
     toObject: { virtuals: true }
 });
+/*
 UserSchema.virtual('budgets', {
     ref: 'Budget',
     localField: '_id',
     foreignField: 'userId',
-})
-UserSchema.virtual('expenses', {
-    ref: 'Expense',
-    localField: '_id',
-    foreignField: 'userId',
-}*/
-});
+})*/
 
 module.exports = mongoose.model('User', UserSchema, 'users');
 

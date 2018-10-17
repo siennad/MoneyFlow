@@ -1,43 +1,34 @@
 <mat-expansion-panel>
-  <mat-expansion-panel-header>
-    <mat-panel-title>
-      Budget
-    </mat-panel-title>
-    <mat-panel-description>
-      Type in your budget
-    </mat-panel-description>
-  </mat-expansion-panel-header>
+    <mat-expansion-panel-header>
+        <mat-panel-title>
+            Budget
+        </mat-panel-title>
+        <mat-panel-description>
+            Type in your budget
+        </mat-panel-description>
+    </mat-expansion-panel-header>
 
-  <form (submit)="onAddBudget(budgetForm)" #budgetForm="ngForm">
+    <form (submit)="(!hasValue)? onAddBudget(budgetForm): onUpdateBudget(budgetForm)" #budgetForm="ngForm">
 
-      <mat-form-field>
-        <input matInput ngModel
-          placeholder="Your budget"
-          type="number"
-          class="input-right-align"
-          name="amount"
-          [(ngModel)] = "value"
-          required>
-        <span matPrefix>&#8364;&nbsp;&nbsp;</span>
-      </mat-form-field>
+        <mat-form-field>
+            <input matInput ngModel placeholder="Your budget" type="number" class="input-right-align" name="amount" [(ngModel)]="value" required>
+            <span matPrefix>&#8364;&nbsp;&nbsp;</span>
+        </mat-form-field>
 
-      &nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;
 
-      <mat-form-field>
-        <mat-select ngModel
-          placeholder="Select your period of time"
-          name="period"
-          [(ngModel)] = "period"
-          aria-required="true">
-          <mat-option value="oneWeek">One Week</mat-option>
-          <mat-option value="twoWeek">Two Week</mat-option>
-          <mat-option value="oneMonth">One Month</mat-option>
-        </mat-select>
-      </mat-form-field>
+        <mat-form-field>
+            <mat-select ngModel placeholder="Select your period of time" name="period" [(ngModel)]="period" aria-required="true">
+                <mat-option value="oneWeek">One Week</mat-option>
+                <mat-option value="twoWeek">Two Week</mat-option>
+                <mat-option value="oneMonth">One Month</mat-option>
+            </mat-select>
+        </mat-form-field>
 
-      &nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;
 
-      <button mat-raised-button color="primary" type="submit">Save</button>
+        <button mat-raised-button color="primary" type="submit" *ngIf="!hasValue"> Save </button>
+        <button mat-raised-button color="primary" type="submit" *ngIf="hasValue" disabled matTooltip="Cannot update right now!"> Update </button>
     </form>
 
 </mat-expansion-panel>

@@ -16,7 +16,7 @@
         </ul>
         <ul class="navbar-nav ml-auto mt-2 mt-lg-0" *ngIf="loginStatus">
             <li class="nav-item">
-                <a class="nav-link" href="#">Hello user </a>
+                <a class="nav-link" href="#">Hello {{ username }} </a>
             </li>
             <li class="nav-item active">
                 <a class="nav-link" (click)="logout()">Logout</a>

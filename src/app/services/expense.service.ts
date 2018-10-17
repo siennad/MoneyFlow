@@ -1,38 +1,60 @@
+import { UserService } from './user.service';
 import { Inject, Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { Budget } from '../budget-input/budget.model';
 import { Expense } from '../expense/expense.model';
 import { SESSION_STORAGE, StorageService } from 'angular-webstorage-service';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject, Subject, Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Category } from '../expense/category.model';
+import { HttpClient } from '@angular/common/http';
+import { User } from '../user/user.model';
+
 @Injectable({
   providedIn: 'root'
 })
 export class ExpenseService {
 
   constructor(@Inject(SESSION_STORAGE) private storage: StorageService,
-      public snackBar: MatSnackBar) { }
+              public snackBar: MatSnackBar,
+              private userService: UserService,
+              private http: HttpClient) {
+
+        this.sub = this.budgetUpdated.asObservable().subscribe( data => this.budget = data);
+              }
 
   expenseList: Expense[] = [];
   private listUpdate: Subject<Expense[]> = new Subject<Expense[]>() ;
 
   // below to anounce that budget has been inputted so that the expense form available
   public budgetInput: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this.hasBudget());
+  public budgetUpdated: Subject<any> = new Subject();
   public budget;
+  private sub: Subscription;
+  getCurrentUserId() {
+    return this.userService.userLog != null ? this.userService.userLog.id : null;
+  }
 
-  addBudget(budget: Budget) {
+  addBudget(budget: Budget, userid) {
     // TODO now save to local storage, later save to server database
-    this.storage.set('budget', budget);
-    this.getBudgetValue();
-    this.notify('Budget added successfully!');
-
-    // SUB subcription for changing
-    this.budgetInput.next(true);
+    const headers = new Headers({'Content-Type': 'application/json'});
+    this.http.post<Budget>('http://localhost:8080/api/add/budget', {budget: budget, userid: userid}).subscribe(
+      res => {
+        // console.log(res);
+        this.storage.set('budget', res);
+        this.notify('Budget added successfully!');
+        // SUB subcription for changing
+        this.budgetInput.next(true);
+        this.budgetUpdated.next(res);
+      },
+      err => {
+        this.notify('Cannot add budget!');
+      }
+    );
   }
 
   getBudgetNotify(): Budget | string {
-    if (this.storage.get('budget') == null ) {
+    if (this.budget == null ) {
       // tslint:disable-next-line:prefer-const
       let message = 'No budget input yet';
       this.notify(message);
@@ -47,6 +69,7 @@ export class ExpenseService {
 
   getBudgetValue() {
     const budget = this.getBudget();
+
     return (budget == null) ? null :  budget.amount;
   }
 
@@ -60,19 +83,52 @@ export class ExpenseService {
     return (budget == null) ? null : budget.id;
   }
 
-  getBudget(): Budget {
-    if (this.storage.get('budget') == null ) {
-      // tslint:disable-next-line:prefer-const
-      return null;
-    } else {
-      // tslint:disable-next-line:prefer-const
-      let budget = JSON.parse(JSON.stringify(this.storage.get('budget')));
-      return budget;
+  getBudget(): any {
+    if (! this.budget) {
+      this.getBudgetFromdb();
     }
+    return this.budget;
+  }
+
+  getBudgetFromdb() {
+    const userId = this.getCurrentUserId();
+
+    this.http.post<Budget>('http://localhost:8080/api/get/budgets', {userid: userId})
+    .subscribe(
+      (data) => {
+      // tslint:disable-next-line:prefer-const
+      this.budgetUpdated.next(data);
+      this.budgetInput.next(true);
+    },
+    (err) => {
+      console.error(err);
+      if (this.storage.get('budget') == null ) {
+        this.budget = null;
+      } else {
+        this.budget = JSON.parse(JSON.stringify(this.storage.get('budget')));
+      }
+    });
+
   }
 
   hasBudget(): boolean {
     return (this.getBudget() == null) ? false : true;
+  }
+
+  updateBudget(budget: Budget, budgetId) {
+    this.http.post<Budget>('http://localhost:8080/api/update/budget', {budget: budget, id: budgetId}).subscribe(
+      res => {
+        // console.log(res);
+        this.storage.set('budget', res);
+        // SUB subcription for changing
+        this.budgetUpdated.next(res);
+      },
+      err => {
+        this.notify('Cannot update budget!');
+        console.log(err);
+
+      }
+    );
   }
 
   differentBtwDate( date1: Date, date2: Date) {
@@ -133,13 +189,10 @@ export class ExpenseService {
     } else {
       message = 'You haven\'t set your budget';
     }
-    console.log({remainDays: remainDays, message: message});
-
     return {remainDays: remainDays, message: message};
   }
 
   getBudgetRemain(list) {
-    const budget = this.getBudget();
     const budgetAmount = this.getBudgetValue();
     let remainValue = 0;
     let message = '';
@@ -184,10 +237,6 @@ export class ExpenseService {
       console.error(e);
       this.notify(e);
     } */
-    console.log(this.expenseList);
-    console.log(this.listUpdate);
-
-
     this.expenseList.push(item);
     // SUB subcription for changing
     this.listUpdate.next([...this.expenseList]);
@@ -198,7 +247,6 @@ export class ExpenseService {
     this.storage.set('expenseList', this.expenseList);
     console.log(this.expenseList);
     console.log(this.listUpdate);
-
   }
 
   // Return in expense list

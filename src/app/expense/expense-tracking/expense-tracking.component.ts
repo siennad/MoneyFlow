@@ -17,7 +17,7 @@ export class ExpenseTrackingComponent implements OnInit {
       this.budgetTracking = this.expenseService.getBudgetRemain(list);
     });
 
-    this.expenseService.budgetInput.subscribe(value => {
+    this.expenseService.budgetUpdated.subscribe(value => {
       this.timeTracking = this.expenseService.getBudgetRemainDay();
       this.budgetTracking = this.expenseService.getBudgetRemain(this.expenselist);
     });
@@ -38,7 +38,8 @@ export class ExpenseTrackingComponent implements OnInit {
     this.date = new Date();
     this.expenselist = this.expenseService.getExpenseList();
     console.log(this.categorize);
-
+    this.timeTracking = this.expenseService.getBudgetRemainDay();
+    this.budgetTracking = this.expenseService.getBudgetRemain(this.expenselist);
   }
 
 }
