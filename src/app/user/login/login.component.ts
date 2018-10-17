@@ -1,3 +1,4 @@
+import { ExpenseService } from './../../services/expense.service';
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { UserService } from '../../services/user.service';
@@ -10,7 +11,7 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private userService: UserService, private router: Router) {
+  constructor(private userService: UserService, private router: Router, private expenseService: ExpenseService) {
     this.userService.loginStatus.subscribe( value => {
       if (value === true) {
         this.router.navigate(['home']);
@@ -27,15 +28,7 @@ export class LoginComponent implements OnInit {
       password: form.value.password ,
     };
 
-    console.log(user);
-    this.userService.verifyUser(user)
-    .subscribe(
-      res => {
-        console.log(res);
-        localStorage.setItem('token', res.token);
-        this.userService.loginStatus.next(true);
-      },
-      err => console.log(err)
-    );
+    this.userService.verifyUser(user);
+    this.expenseService.getBudgetValue();
   }
 }

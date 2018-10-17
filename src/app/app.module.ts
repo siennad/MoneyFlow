@@ -7,12 +7,14 @@ import { HttpClientModule } from '@angular/common/http';
 // tobe deleted later when adding to server
 import { StorageServiceModule } from 'angular-webstorage-service';
 
+// services
+import { UserService } from './services/user.service';
+
 import {  MatInputModule, MatSelectModule, MatSnackBarModule,
           MatCardModule, MatButtonModule, MatDatepickerModule,
           MatToolbarModule, MatExpansionModule, MatPaginatorModule,
-          MatTableModule,
-          MatNativeDateModule, MatHeaderRowDef,
-          MatSortHeader, MatRow, MatRowDef,  MatCell, MatCellDef,
+          MatTableModule, MatTooltipModule,
+          MatNativeDateModule,
     } from '@angular/material';
 import { MatSortModule } from '@angular/material/sort';
 
@@ -51,13 +53,13 @@ import { RegisterComponent } from './user/register/register.component';
     AppRoutingModule, HttpModule, HttpClientModule,
     // Mat
     MatInputModule, MatSnackBarModule, MatPaginatorModule,
-    MatCardModule, MatSelectModule, MatSortModule,
+    MatCardModule, MatSelectModule, MatSortModule, MatTooltipModule,
     MatButtonModule, MatToolbarModule, MatExpansionModule,
     MatDatepickerModule, MatNativeDateModule, MatTableModule,
     // temporary stuffs added here
     StorageServiceModule
   ],
-  providers: [],
+  providers: [UserService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

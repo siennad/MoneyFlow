@@ -29,16 +29,7 @@ export class RegisterComponent implements OnInit {
       password : form.value.password
     };
 
-    this.userService.addUser(newUser)
-      .subscribe( res => {
-        console.log(res);
-        localStorage.setItem('token', res.token);
-        this.userService.loginStatus.next(true);
-      },
-      err => {
-        console.log(err);
-      });
-
+    this.userService.addUser(newUser);
   }
 
 

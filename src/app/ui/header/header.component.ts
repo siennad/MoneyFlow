@@ -9,9 +9,14 @@ import { UserService } from '../../services/user.service';
 export class HeaderComponent implements OnInit {
 
   loginStatus;
+  username = 'user';
   constructor( private userService: UserService ) {
     this.userService.loginStatus.subscribe( value => {
+      console.log(value);
       this.loginStatus = value;
+      if (value) {
+        this.username = this.userService.userLog ? this.userService.userLog.name : 'user';
+      }
     });
   }
 

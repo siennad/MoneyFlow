@@ -3,6 +3,7 @@ import { CATEGORIES } from '../../mock/CATEGORIES';
 import { NgForm } from '@angular/forms';
 import { ExpenseService } from '../../services/expense.service';
 import { Expense } from '../expense.model';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-expense-input',
@@ -11,7 +12,7 @@ import { Expense } from '../expense.model';
 })
 export class ExpenseInputComponent implements OnInit {
 
-  constructor( private expenseService: ExpenseService ) {
+  constructor( private expenseService: ExpenseService, private userService: UserService ) {
     this.expenseService.budgetInput.subscribe(value => {
       // console.log(value);
       this.formDisabled = value;
@@ -23,6 +24,7 @@ export class ExpenseInputComponent implements OnInit {
   date;
   formDisabled;
   minDay; maxDay;
+  userId;
 
   ngOnInit() {
     this.categories = CATEGORIES;
@@ -32,7 +34,6 @@ export class ExpenseInputComponent implements OnInit {
     // console.log(this.date);
     this.minDay = new Date().setDate(new Date().getDate() - 7);
     this.maxDay = new Date().setDate(new Date().getDate() + 2);
-
   }
 
   // TODO add by date (auto generated)
@@ -48,7 +49,7 @@ export class ExpenseInputComponent implements OnInit {
     // TODO userid is mock
     const expense: Expense = {id: ID, name: form.value.name,
       spend: form.value.spend, category: form.value.category, date: form.value.date,
-      userId: 1, budgetId: this.expenseService.getBudgetId() };
+      budgetId: this.expenseService.getBudgetId() };
 
     console.log(expense);
 

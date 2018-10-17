@@ -9,6 +9,5 @@ export interface Expense {
   spend: number;
   category: Category;
   date: MatDateFormats;
-  userId: User['id'];
-  budgetId: Budget['id'];
+  budgetId?: Budget['id'];
 }

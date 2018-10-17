@@ -11,7 +11,8 @@ export class MainPageComponent implements OnInit {
 
   constructor(private userService: UserService, private router: Router) {
     this.userService.loginStatus.subscribe( value => {
-      if (value === false) {
+      console.log(value);
+      if (value !== true) {
         this.router.navigate(['login']);
       }
     });
