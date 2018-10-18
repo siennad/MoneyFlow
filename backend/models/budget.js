@@ -1,17 +1,16 @@
 const mongoose = require('mongoose');
 
-const BudgetSchema = mongoose.Schema({
-    _id: {
-        type: String,
-        required: true,
-    },
-    userId: {
-        type: mongoose.Schema.ObjectId,
-        ref: 'User',
-        required: true
-    },
+delete mongoose.connection.models['Budget']
+mongoose.set('useCreateIndex', true);
+const Schema = mongoose.Schema;
+
+const User = require('./user')
+const Expense = require('./expense')
+
+const BudgetSchema = new Schema({
+    _id: Schema.Types.ObjectId,
     period: {
-        type: Number,
+        type: String,
         required: true
     },
     amount: {
@@ -23,16 +22,17 @@ const BudgetSchema = mongoose.Schema({
         required: true,
         default: Date.now
     },
+    user: { type: Schema.Types.ObjectId, ref: 'User', childPath: 'budget' },
+    expenseList: [{ type: Schema.Types.ObjectId, ref: 'Expense', required: false }]
+        /*}, {
+            toJSON: { virtuals: true },
+            toObject: { virtuals: true }
+        });
 
-}, {
-    toJSON: { virtuals: true },
-    toObject: { virtuals: true }
-});
-
-BudgetSchema.virtual('Expenses', {
-    ref: 'Expense',
-    localField: '_id',
-    foreignField: 'budgetId',
+        BudgetSchema.virtual('Expenses', {
+            ref: 'Expense',
+            localField: '_id',
+            foreignField: 'budgetId',*/
 })
 
-const Budget = module.exports = mongoose.model('Budget', BudgetSchema);
+module.exports = mongoose.model('Budget', BudgetSchema);

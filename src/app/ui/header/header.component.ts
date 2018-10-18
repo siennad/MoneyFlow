@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { UserService } from '../../services/user.service';
 
 @Component({
@@ -9,10 +9,19 @@ import { UserService } from '../../services/user.service';
 export class HeaderComponent implements OnInit {
 
   loginStatus;
-  constructor( private userService: UserService ) { 
+  username = 'user';
+  constructor( private userService: UserService ) {
     this.userService.loginStatus.subscribe( value => {
+      console.log(value);
       this.loginStatus = value;
-    })
+      if (value) {
+        this.username = this.userService.userLog ? this.userService.userLog.name : 'user';
+      }
+    });
+  }
+
+  logout() {
+    this.userService.userLogout();
   }
 
   ngOnInit() {}

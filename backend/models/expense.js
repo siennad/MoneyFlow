@@ -1,18 +1,11 @@
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+
+mongoose.set('useCreateIndex', true);
+const Budget = require('./budget');
 
 const ExpenseSchema = mongoose.Schema({
-    _id: {
-        type: String,
-        required: true,
-    },
-    userId: {
-        type: mongoose.Schema.ObjectId,
-        ref: 'User',
-    },
-    budgetId: {
-        type: mongoose.Schema.ObjectId,
-        ref: 'Budget',
-    },
+    _id: Schema.Types.ObjectId,
     name: {
         type: String,
         required: true,
@@ -30,7 +23,8 @@ const ExpenseSchema = mongoose.Schema({
         required: true,
         default: Date.now
     },
+    budget: { type: Schema.Types.ObjectId, ref: 'Budget', childPath: 'expenseList' }
 
 });
 
-const Expense = module.exports = mongoose.model('Expense', ExpenseSchema);
+module.exports = mongoose.model('Expense', ExpenseSchema, 'expenses');

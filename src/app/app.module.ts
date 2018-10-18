@@ -2,16 +2,19 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
+import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 // tobe deleted later when adding to server
 import { StorageServiceModule } from 'angular-webstorage-service';
+
+// services
+import { UserService } from './services/user.service';
 
 import {  MatInputModule, MatSelectModule, MatSnackBarModule,
           MatCardModule, MatButtonModule, MatDatepickerModule,
           MatToolbarModule, MatExpansionModule, MatPaginatorModule,
-          MatTableModule,
-          MatNativeDateModule, MatHeaderRowDef,
-          MatSortHeader, MatRow, MatRowDef,  MatCell, MatCellDef,
+          MatTableModule, MatTooltipModule,
+          MatNativeDateModule,
     } from '@angular/material';
 import { MatSortModule } from '@angular/material/sort';
 
@@ -27,6 +30,7 @@ import { SidebarComponent } from './ui/sidebar/sidebar.component';
 import { ExpenseTrackingComponent } from './expense/expense-tracking/expense-tracking.component';
 import { LoginComponent } from './user/login/login.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { RegisterComponent } from './user/register/register.component';
 
 @NgModule({
   declarations: [
@@ -41,20 +45,21 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
     ExpenseTrackingComponent,
     LoginComponent,
     PageNotFoundComponent,
+    RegisterComponent,
   ],
   imports: [
     BrowserModule, BrowserAnimationsModule,
     FormsModule, ReactiveFormsModule,
-    AppRoutingModule,
+    AppRoutingModule, HttpModule, HttpClientModule,
     // Mat
     MatInputModule, MatSnackBarModule, MatPaginatorModule,
-    MatCardModule, MatSelectModule, MatSortModule,
+    MatCardModule, MatSelectModule, MatSortModule, MatTooltipModule,
     MatButtonModule, MatToolbarModule, MatExpansionModule,
     MatDatepickerModule, MatNativeDateModule, MatTableModule,
     // temporary stuffs added here
     StorageServiceModule
   ],
-  providers: [],
+  providers: [UserService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

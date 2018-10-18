@@ -1,38 +1,47 @@
+import { UserService } from './user.service';
 import { Inject, Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { Budget } from '../budget-input/budget.model';
 import { Expense } from '../expense/expense.model';
 import { SESSION_STORAGE, StorageService } from 'angular-webstorage-service';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject, Subject, Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Category } from '../expense/category.model';
+import { HttpClient } from '@angular/common/http';
+import { User } from '../user/user.model';
+
 @Injectable({
   providedIn: 'root'
 })
 export class ExpenseService {
 
   constructor(@Inject(SESSION_STORAGE) private storage: StorageService,
-      public snackBar: MatSnackBar) { }
+              public snackBar: MatSnackBar,
+              private userService: UserService,
+              private http: HttpClient) {
+        // subscribe the data budget after adding/updating
+        this.sub = this.budgetUpdated.asObservable().subscribe( data => this.budget = data);
+        this.sub = this.listUpdate.asObservable().subscribe(data =>  {
+          this.expenseList = data;
+          console.log(data);
+          console.log(this.listUpdate.asObservable());
+        });
+  }
 
-  expenseList: Expense[] = [];
+  expenseList: any;
   private listUpdate: Subject<Expense[]> = new Subject<Expense[]>() ;
 
   // below to anounce that budget has been inputted so that the expense form available
   public budgetInput: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this.hasBudget());
+  public budgetUpdated: Subject<any> = new Subject();
   public budget;
+  private sub: Subscription;
 
-  addBudget(budget: Budget) {
-    // TODO now save to local storage, later save to server database
-    this.storage.set('budget', budget);
-    this.getBudgetValue();
-    this.notify('Budget added successfully!');
-
-    // SUB subcription for changing
-    this.budgetInput.next(true);
+  getCurrentUserId() {
+    return this.userService.userLog != null ? this.userService.userLog.id : null;
   }
 
   getBudgetNotify(): Budget | string {
-    if (this.storage.get('budget') == null ) {
+    if (this.budget == null ) {
       // tslint:disable-next-line:prefer-const
       let message = 'No budget input yet';
       this.notify(message);
@@ -47,6 +56,7 @@ export class ExpenseService {
 
   getBudgetValue() {
     const budget = this.getBudget();
+
     return (budget == null) ? null :  budget.amount;
   }
 
@@ -60,26 +70,23 @@ export class ExpenseService {
     return (budget == null) ? null : budget.id;
   }
 
-  getBudget(): Budget {
-    if (this.storage.get('budget') == null ) {
-      // tslint:disable-next-line:prefer-const
-      return null;
-    } else {
-      // tslint:disable-next-line:prefer-const
-      let budget = JSON.parse(JSON.stringify(this.storage.get('budget')));
-      return budget;
-    }
-  }
-
   hasBudget(): boolean {
     return (this.getBudget() == null) ? false : true;
   }
 
-  differentBtwDate( date1: Date, date2: Date) {
-    let diff = 0;
-    const mls1Day = 1000 * 60 * 60 * 24;
-    diff = Math.round( (date1.getTime() - date2.getTime()) / mls1Day );
-    return diff;
+  updateBudget(budget: Budget, budgetId) {
+    this.http.put<Budget>('http://localhost:8080/api/update/budget', {budget: budget, id: budgetId}).subscribe(
+      res => {
+        // console.log(res);
+        localStorage.setItem('budget', JSON.stringify(res));
+        // SUB subscription for changing
+        this.budgetUpdated.next(res);
+      },
+      err => {
+        this.notify('Cannot update budget!');
+        console.log(err);
+      }
+    );
   }
 
   getBudgetRemainDay() {
@@ -133,12 +140,10 @@ export class ExpenseService {
     } else {
       message = 'You haven\'t set your budget';
     }
-
     return {remainDays: remainDays, message: message};
   }
 
   getBudgetRemain(list) {
-    const budget = this.getBudget();
     const budgetAmount = this.getBudgetValue();
     let remainValue = 0;
     let message = '';
@@ -167,47 +172,115 @@ export class ExpenseService {
     return {remainValue: remainValue, message: message};
   }
 
+  getBudgetFromdb() {
+    if (!this.userService.loginStatus) {
+      return;
+    }
+
+    const userId = this.getCurrentUserId();
+
+    this.http.post<Budget>('http://localhost:8080/api/get/budgets', {userid: userId})
+    .subscribe(
+      (data) => {
+      this.budgetUpdated.next(data);
+      this.budgetInput.next(true);
+      localStorage.setItem('budget', JSON.stringify(data));
+    },
+    (err) => {
+      console.error(err);
+      if (localStorage.getItem('budget') == null ) {
+        this.budget = null;
+      } else {
+        this.budget = JSON.parse(localStorage.getItem('budget'));
+      }
+    });
+
+  }
+
+  getBudget(): any {
+    // check local var first, if not, check for localstorage, then db
+    if (! this.budget) {
+      if (localStorage.getItem('budget') != null) {
+        this.budget = JSON.parse(localStorage.getItem('budget'));
+      } else {
+        this.budget = this.getBudgetFromdb();
+      }
+    }
+    return this.budget;
+  }
+
+  addBudget(budget: Budget) {
+    // TODO now save to local storage, later save to server database
+    this.http.post<Budget>('http://localhost:8080/api/add/budget', {budget: budget, userid: this.getCurrentUserId}).subscribe(
+      res => {
+        localStorage.setItem('budget', JSON.stringify(res));
+        this.notify('Budget added successfully!');
+        // SUB subscription for changing
+        this.budgetInput.next(true);
+        this.budgetUpdated.next(res);
+      },
+      err => {
+        this.notify('Cannot add budget!');
+      }
+    );
+  }
+
+  differentBtwDate( date1: Date, date2: Date) {
+    let diff = 0;
+    const mls1Day = 1000 * 60 * 60 * 24;
+    diff = Math.round( (date1.getTime() - date2.getTime()) / mls1Day );
+    return diff;
+  }
+
   addExpenseItem(item: Expense) {
-    console.log('add item');
-
-    /* try {
-      // local
-      this.expenseList.push(item);
-      this.listUpdate.next([...this.expenseList]);
-      // tslint:disable-next-line:prefer-const
-      let currentExpenseList = this.storage.get('expenseList') || [];
-      currentExpenseList.push(item);
-      this.storage.set('expenseList', currentExpenseList);
-      this.notify('New item added');
-    } catch (e) {
-      console.error(e);
-      this.notify(e);
-    } */
-    this.expenseList.push(item);
-    // SUB subcription for changing
-    this.listUpdate.next([...this.expenseList]);
-
-    // tslint:disable-next-line:prefer-const
-    let currentExpenseList = this.storage.get('expenseList') || [];
-    currentExpenseList.push(item);
-    this.storage.set('expenseList', this.expenseList);
+    this.expenseList = this.getExpenseList();
+    // get from local storage and then save to var
+    // this.expenseList = this.getExpenseList();
+    this.http.post<Expense>('http://localhost:8080/api/add/expense', {expenseitem: item, budgetid: this.getBudgetId()})
+      .subscribe(
+        (res) => {
+          console.log(res);
+          // save to file session
+          this.expenseList.push(res);
+          this.listUpdate.next([...this.expenseList]);
+          // save to localStorage
+          localStorage.setItem('expenseList', JSON.stringify(this.expenseList));
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
   }
 
   // Return in expense list
-  getExpenseList() {
-
-    this.expenseList = [];
-    if (this.storage.get('expenseList') != null ) {
-      // get data from local storage. change to server
-      this.storage.get('expenseList').map( data => {
-        this.expenseList.push(data);
-      });
-      // SUB subcription for changing
-      this.listUpdate.next([...this.expenseList]);
-      return [...this.expenseList];
-    } else {
-      return null;
+  getExpenseListFromdb() {
+    if (!this.userService.loginStatus) {
+      return;
     }
+
+    this.http.post('http://localhost:8080/api/get/expense', {budgetid: this.getBudgetId()})
+      .subscribe(
+        (res) => {
+          console.log(res);
+          this.expenseList = res;
+          this.listUpdate.next([...this.expenseList]);
+          localStorage.setItem('expenseList', JSON.stringify(this.expenseList));
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
+  }
+
+  getExpenseList() {
+    if (!this.expenseList) {
+      if (localStorage.getItem('expenseList') != null) {
+        this.expenseList = JSON.parse( localStorage.getItem('expenseList') );
+      } else {
+        this.getExpenseListFromdb();
+      }
+    }
+    return this.expenseList;
   }
 
   getListUpdateListener() {
@@ -247,33 +320,27 @@ export class ExpenseService {
 
   // get expense list by category:
   // return Expense[]
-  getExpenseByCategory( cat: Category) {
-    // tslint:disable-next-line:prefer-const
-    let ExpenseByCat = [];
-    const expenseList = this.getExpenseList();
-
-    if (expenseList === null) {
+  getExpenseByCategory( cat ) {
+    if (!this.getExpenseList()) {
       return null;
     }
-    // tslint:disable-next-line:prefer-const
-    for ( let item of expenseList) {
+    const expenseList = this.getExpenseList();
+    const ExpenseByCat = [];
+    for ( const item of expenseList) {
       // tslint:disable-next-line:no-unused-expression
-      (item.category.name === cat.name) ? ExpenseByCat.push(item) : null;
+      (item.category === cat) ? ExpenseByCat.push(item) : null;
     }
-
-    // console.log(ExpenseByCat);
-
     return ExpenseByCat;
   }
 
   // get array of object expense value by category :
-  // return [{category, ValueExpense}]
+  // return [{category: val, ValueExpense : {total: val, totalSpend: val}}]
   divideExpenseByCategory() {
     // tslint:disable-next-line:prefer-const
     let ExpenseListByCat = [];
     const expenseList = this.getExpenseList();
 
-    if (expenseList === null) {
+    if (!expenseList) {
       return null;
     }
 
@@ -308,7 +375,7 @@ export class ExpenseService {
       let catInit = false;
       for (const cat of CategoryList) {
         if (CategoryList.length !== 0) {
-          if ( item.category.name ===  cat.name) {
+          if ( item.category ===  cat) {
             catInit = true;
           }
         }

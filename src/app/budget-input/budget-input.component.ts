@@ -4,6 +4,8 @@ import { NgForm } from '@angular/forms';
 
 import { ExpenseService } from '../services/expense.service';
 import { Budget } from '../budget-input/budget.model';
+import { UserService } from '../services/user.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-budget-input',
@@ -11,13 +13,23 @@ import { Budget } from '../budget-input/budget.model';
   styleUrls: ['./budget-input.component.css']
 })
 export class BudgetInputComponent implements OnInit {
-  constructor( private expenseService: ExpenseService ) { }
+  constructor( private expenseService: ExpenseService, private userService: UserService ) {
+    this.expenseService.budgetUpdated.subscribe( (data) => {
+      if (this.expenseService.getBudget() != null) {
+        this.hasValue = true; // set for form (update or add new)
+      }
+      this.value = this.expenseService.getBudgetValue();
+      this.period = this.expenseService.getBudgetPeriod();
+    });
+  }
 
   // value = this.expenseService.getBudgetValue();
   // period = this.expenseService.getBudgetPeriod();
   value = this.expenseService.getBudgetValue();
   period = this.expenseService.getBudgetPeriod();
   message: any = null;
+  userSub: Subscription;
+  hasValue = false;
 
   ngOnInit() {
     // tslint:disable-next-line:prefer-const
@@ -25,16 +37,22 @@ export class BudgetInputComponent implements OnInit {
   }
 
   onAddBudget(form: NgForm) {
-    const id = ((new Date().getMonth() + 1).toString()) + ((new Date().getDate()).toString()) + form.value.period;
+    // const id = ((new Date().getMonth() + 1).toString()) + ((new Date().getDate()).toString()) + form.value.period + this.userId;
     if (form.invalid) {
       return;
     }
-    const budget: Budget = { id: id, userId: 1, amount: form.value.amount, period: form.value.period, date: new Date()};
-    this.expenseService.addBudget(budget);
-    console.log(budget);
-
+    const budget: Budget = { amount: form.value.amount, period: form.value.period, date: new Date()};
     this.message = this.expenseService.getBudgetValue();
-    console.log(this.message);
     this.expenseService.budgetInput.next(this.expenseService.hasBudget());
+
+    this.expenseService.addBudget(budget);
+  }
+
+  onUpdateBudget(form: NgForm) {
+    const budget: Budget = { amount: form.value.amount, period: form.value.period, date: new Date()};
+    this.message = this.expenseService.getBudgetValue();
+    this.expenseService.budgetInput.next(this.expenseService.hasBudget());
+
+    this.expenseService.updateBudget(budget, this.expenseService.getBudgetId() );
   }
 }
