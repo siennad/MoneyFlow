@@ -283,6 +283,11 @@ export class ExpenseService {
     return this.expenseList;
   }
 
+  deleteItem(itemId) {
+    return null;
+    this.http.post('http://localhost:8080/api/delete/item', {id: itemId});
+  }
+
   getListUpdateListener() {
     return this.listUpdate.asObservable();
   }

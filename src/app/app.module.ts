@@ -14,7 +14,7 @@ import {  MatInputModule, MatSelectModule, MatSnackBarModule,
           MatCardModule, MatButtonModule, MatDatepickerModule,
           MatToolbarModule, MatExpansionModule, MatPaginatorModule,
           MatTableModule, MatTooltipModule,
-          MatNativeDateModule,
+          MatNativeDateModule, MatIconModule
     } from '@angular/material';
 import { MatSortModule } from '@angular/material/sort';
 
@@ -54,7 +54,7 @@ import { RegisterComponent } from './user/register/register.component';
     // Mat
     MatInputModule, MatSnackBarModule, MatPaginatorModule,
     MatCardModule, MatSelectModule, MatSortModule, MatTooltipModule,
-    MatButtonModule, MatToolbarModule, MatExpansionModule,
+    MatButtonModule, MatToolbarModule, MatExpansionModule, MatIconModule,
     MatDatepickerModule, MatNativeDateModule, MatTableModule,
     // temporary stuffs added here
     StorageServiceModule

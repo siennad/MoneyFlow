@@ -16,7 +16,7 @@ export class ExpenseListComponent implements OnInit {
   list;
   listSub: Subscription;
 
-  displayedColumns: string[] = ['date', 'item', 'category', 'amount'];
+  displayedColumns: string[] = ['date', 'item', 'category', 'amount', 'action'];
   dataSource;
 
   @ViewChild(MatSort) sort: MatSort;
@@ -32,5 +32,9 @@ export class ExpenseListComponent implements OnInit {
       this.dataSource = new MatTableDataSource(this.list);
       this.dataSource.sort = this.sort;
     });
+  }
+
+  delete(id) {
+    this.expenseService.deleteItem(id);
   }
 }
