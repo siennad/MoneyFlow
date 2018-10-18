@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 delete mongoose.connection.models['Budget']
-
+mongoose.set('useCreateIndex', true);
 const Schema = mongoose.Schema;
 
 const User = require('./user')

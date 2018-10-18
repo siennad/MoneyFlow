@@ -1,13 +1,13 @@
 import { Budget } from './../budget-input/budget.model';
 import {User} from '../user/user.model';
-import { Category } from './category.model';
+
 import { MatDateFormats } from '@angular/material';
 
 export interface Expense {
-  id: string;
+  id?: string;
   name: string;
   spend: number;
-  category: Category;
+  category: string;
   date: MatDateFormats;
   budgetId?: Budget['id'];
 }

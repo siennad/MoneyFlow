@@ -5,6 +5,7 @@ import { RequestOptions, Headers } from '@angular/http';
 import { HttpClient } from '@angular/common/http';
 /*import { HttpInterceptor } from '@angular/common/http';*/
 import { User } from '../user/user.model';
+import { stringify } from '@angular/core/src/util';
 
 @Injectable({
   providedIn: 'root'
@@ -12,29 +13,36 @@ import { User } from '../user/user.model';
 export class UserService {
 
   public loginStatus: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this.getLoginStatus());
+  public userLog;
 
-  public loggedIn = false;
-  constructor(private http: HttpClient, ) { }
-
-  public userLog; // : Subject<User> = new Subject<User>() ;
+  constructor(private http: HttpClient, ) {
+  }
 
   userLogout() {
-    this.loggedIn = false;
     this.loginStatus.next(false);
-    // console.log(localStorage.getItem('token'));
+    // remove all local storae data
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    if (localStorage.getItem('budget')) { localStorage.removeItem('budget'); }
+    if (localStorage.getItem('expenseList')) { localStorage.removeItem('expenseList'); }
   }
 
   getLoginStatus() {
-    return this.loggedIn ; // = localStorage.getItem('token') != null ? true : false;
+    if ( localStorage.getItem('user') != null ) {
+      this.userLog = JSON.parse(localStorage.getItem('user'));
+      return true;
+    } else {
+      return false;
+    }
   }
 
   addUser(user) {
     this.http.post<any>('http://localhost:8080/api/user/add', {user : user} ).subscribe(
       res => {
         localStorage.setItem('token', res.token);
+        localStorage.setItem('user', JSON.stringify(res.userLogged));
         this.loginStatus.next(true);
-        this.userLog = res.userLogged;
+        this.userLog = res;
       },
       err => alert(err.error)
     );
@@ -44,9 +52,9 @@ export class UserService {
     this.http.post<any>('http://localhost:8080/api/user/verify', {user: user}).subscribe(
       res => {
         localStorage.setItem('token', res.token);
+        localStorage.setItem('user', JSON.stringify(res.userLogged));
         this.loginStatus.next(true);
-        this.userLog = res.userLogged;
-        console.log(this.userLog);
+        this.userLog = res;
       },
       err => alert(err.error)
     );

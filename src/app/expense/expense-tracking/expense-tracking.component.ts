@@ -11,7 +11,7 @@ import { Expense } from '../expense.model';
 export class ExpenseTrackingComponent implements OnInit {
 
   constructor( private expenseService: ExpenseService) {
-    // SUB subcription for changing
+    // SUB subscription for changing
     this.listSub = this.expenseService.getListUpdateListener()
     .subscribe( (list: Expense[]) => {
       this.budgetTracking = this.expenseService.getBudgetRemain(list);

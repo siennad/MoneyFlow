@@ -28,11 +28,8 @@ export class BudgetInputComponent implements OnInit {
   value = this.expenseService.getBudgetValue();
   period = this.expenseService.getBudgetPeriod();
   message: any = null;
-  userId;
   userSub: Subscription;
-  hasValue = false
-
-  ;
+  hasValue = false;
 
   ngOnInit() {
     // tslint:disable-next-line:prefer-const
@@ -48,7 +45,7 @@ export class BudgetInputComponent implements OnInit {
     this.message = this.expenseService.getBudgetValue();
     this.expenseService.budgetInput.next(this.expenseService.hasBudget());
 
-    this.expenseService.addBudget(budget, this.userService.userLog.id );
+    this.expenseService.addBudget(budget);
   }
 
   onUpdateBudget(form: NgForm) {

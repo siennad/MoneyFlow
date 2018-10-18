@@ -63,6 +63,19 @@ router.post('/budgets', (req, res) => {
     })
 })
 
+router.post('/budget', (req, res) => {
+  Budget.findOne({ _id: req.body.budgetid }).populate('user').exec(function(e, r) {
+      if (e) {
+          res.status(400).send(e)
+          console.log(e)
+      }
+      if (r) {
+        console.log(r);
+        res.status(200).send(r)
+      }
+  })
+})
+
 /* END TEST FUNCTIONS */
 
 //add-user
@@ -119,7 +132,7 @@ router.post('/user/verify', (req, res) => {
 
 //add-budget
 router.post('/add/budget', (req, res) => {
-    let budgetData = req.body.budget
+    let budgetData = res.budget;
         // modify again the budget obj
     let newbudget = new Budget({
             _id: new mongoose.Types.ObjectId(),
@@ -201,6 +214,76 @@ router.put('/update/budget', (req, res) => {
             res.send(budget)
         })
 
+})
+
+// add expense item
+
+router.post('/add/expense', (req, res) => {
+  let budgetid = req.body.budgetid;
+  let item = req.body.expenseitem;
+  let newItem = new Expense({
+    _id: new mongoose.Types.ObjectId(),
+    name: item.name,
+    spend: item.spend,
+    category: item.category,
+    date: item.date
+  })
+  // add item to budget
+  Budget.findOne({_id: budgetid}, (err, budget) => {
+    err ? res.send(e) : {};
+
+    if(budget) {
+      budget.expenseList.push(newItem._id);
+      budget.save();
+      newItem.budget = budget._id;
+    }
+  })
+  // save item
+  newItem.save((err, newItem) => {
+    (err) ? res.status(400).send({errAddItem: err}) : {}
+
+    if (newItem) {
+      let expenseItem = {
+        id: newItem._id,
+        name: newItem.name,
+        spend: newItem.spend,
+        category: newItem.category,
+        date: newItem.date,
+        budget: newItem.budget
+      }
+
+      res.status(200).send(expenseItem);
+    }
+  })
+})
+
+router.post('/get/expense', (req, res) => {
+  let budgetid = req.body.budgetid;
+  // add item to budget
+  Budget.findOne({_id: budgetid}).populate('expenseList').exec( (e, budget) => {
+    if (e) {
+      res.status(400).send(e) ;
+      console.log(e);
+    }
+
+    if (budget) {
+      let expenseList = [];
+      let listFromDb = budget.expenseList; // list from server
+      listFromDb.forEach((ele) => {
+        let item = {
+          id: ele._id,
+          name: ele.name,
+          spend: ele.spend,
+          category: ele.category,
+          date: ele.date,
+          budget: ele.budget
+        }
+        expenseList.push(item);
+      })
+      console.log('fetch data successfully');
+      res.status(200).send(expenseList);
+    }
+  })
 })
 
 module.exports = router;

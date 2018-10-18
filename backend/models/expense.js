@@ -1,18 +1,11 @@
-const mongoose = require('mongoose'),
-    Schema = mongoose.Schema;
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
+mongoose.set('useCreateIndex', true);
 const Budget = require('./budget');
 
 const ExpenseSchema = mongoose.Schema({
     _id: Schema.Types.ObjectId,
-    userId: {
-        type: mongoose.Schema.ObjectId,
-        ref: 'User',
-    },
-    budgetId: {
-        type: mongoose.Schema.ObjectId,
-        ref: 'Budget',
-    },
     name: {
         type: String,
         required: true,
