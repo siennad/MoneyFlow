@@ -182,7 +182,6 @@ export class ExpenseService {
     this.http.post<Budget>('http://localhost:8080/api/get/budgets', {userid: userId})
     .subscribe(
       (data) => {
-      // tslint:disable-next-line:prefer-const
       this.budgetUpdated.next(data);
       this.budgetInput.next(true);
       localStorage.setItem('budget', JSON.stringify(data));
