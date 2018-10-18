@@ -181,6 +181,7 @@ router.post('/get/budgets', (req, res) => {
         if (r) {
             // return only 1st
             // console.log(r.budget);
+            (budget == []) ? res.status(200).send(null) : {};
             let budget = {
                 id: r.budget[0]._id,
                 period: r.budget[0].period,

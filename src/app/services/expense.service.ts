@@ -173,7 +173,7 @@ export class ExpenseService {
   getBudgetFromdb() {
     const userId = this.getCurrentUserId();
 
-    this.http.post<Budget>('http://localhost:8080/api/get/budgets', {userid: userId})
+    this.http.post<Budget>('/api/get/budgets', {userid: userId})
     .subscribe(
       (data) => {
       this.budgetUpdated.next(data);
@@ -212,7 +212,7 @@ export class ExpenseService {
 
   addBudget(budget: Budget) {
     // TODO now save to local storage, later save to server database
-    this.http.post<Budget>('http://localhost:8080/api/add/budget', {budget: budget, userid: this.getCurrentUserId}).subscribe(
+    this.http.post<Budget>('/api/add/budget', {budget: budget, userid: this.getCurrentUserId}).subscribe(
       res => {
         localStorage.setItem('budget', JSON.stringify(res));
         this.notify('Budget added successfully!');
@@ -237,7 +237,7 @@ export class ExpenseService {
     this.expenseList = this.getExpenseList();
     // get from local storage and then save to var
     // this.expenseList = this.getExpenseList();
-    this.http.post<Expense>('http://localhost:8080/api/add/expense', {expenseitem: item, budgetid: this.getBudgetId()})
+    this.http.post<Expense>('/api/add/expense', {expenseitem: item, budgetid: this.getBudgetId()})
       .subscribe(
         (res) => {
           console.log(res);
@@ -255,7 +255,7 @@ export class ExpenseService {
 
   // Return in expense list
   getExpenseListFromdb() {
-    this.http.post('http://localhost:8080/api/get/expense', {budgetid: this.getBudgetId()})
+    this.http.post('/api/get/expense', {budgetid: this.getBudgetId()})
       .subscribe(
         (res) => {
           this.expenseList = res;

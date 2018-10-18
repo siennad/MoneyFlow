@@ -37,7 +37,7 @@ export class UserService {
   }
 
   addUser(user) {
-    this.http.post<any>('http://localhost:8080/api/user/add', {user : user} ).subscribe(
+    this.http.post<any>('/api/user/add', {user : user} ).subscribe(
       res => {
         localStorage.setItem('token', res.token);
         localStorage.setItem('user', JSON.stringify(res.userLogged));
@@ -49,7 +49,7 @@ export class UserService {
   }
 
   verifyUser(user) {
-    this.http.post<any>('http://localhost:8080/api/user/verify', {user: user}).subscribe(
+    this.http.post<any>('/api/user/verify', {user: user}).subscribe(
       res => {
         localStorage.setItem('token', res.token);
         localStorage.setItem('user', JSON.stringify(res.userLogged));
