@@ -42,4 +42,8 @@ export class ExpenseListComponent implements OnInit, AfterViewInit {
   delete(id) {
     this.expenseService.deleteItem(id);
   }
+
+  applyFilter(filterValue: string) {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
 }
