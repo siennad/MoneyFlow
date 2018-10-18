@@ -2,7 +2,13 @@
     <app-sidebar></app-sidebar>
     <div id="main" class="container">
         <app-header></app-header>
-        <router-outlet></router-outlet>
+        <div [hidden]="!loading" class="loader">
+            <h2>Loading...</h2>
+            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        </div>
+        <div [hidden]="loading" class="router-output">
+          <router-outlet></router-outlet>
+        </div>
         <app-footer></app-footer>
     </div>
 </div>
