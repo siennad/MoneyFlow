@@ -42,7 +42,7 @@
         #category = "ngModel"
         required
         aria-required="true">
-        <mat-option *ngFor="let category of categories" [value]="category"> {{category.name}} </mat-option>
+        <mat-option *ngFor="let category of categories" [value]="category"> {{category}} </mat-option>
       </mat-select>
       <mat-error *ngIf="category.invalid">Please choose the category</mat-error>
     </mat-form-field>
