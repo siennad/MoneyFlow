@@ -13,7 +13,7 @@ import { UserService } from './services/user.service';
 import {  MatInputModule, MatSelectModule, MatSnackBarModule,
           MatCardModule, MatButtonModule, MatDatepickerModule,
           MatToolbarModule, MatExpansionModule, MatPaginatorModule,
-          MatTableModule, MatTooltipModule,
+          MatTableModule, MatTooltipModule, MatProgressBarModule,
           MatNativeDateModule, MatIconModule
     } from '@angular/material';
 import { MatSortModule } from '@angular/material/sort';
@@ -60,6 +60,7 @@ import { ExpenseGraphComponent } from './expense/expense-graph/expense-graph.com
     MatCardModule, MatSelectModule, MatSortModule, MatTooltipModule,
     MatButtonModule, MatToolbarModule, MatExpansionModule, MatIconModule,
     MatDatepickerModule, MatNativeDateModule, MatTableModule,
+    MatProgressBarModule,
     // temporary stuffs added here
     StorageServiceModule
   ],

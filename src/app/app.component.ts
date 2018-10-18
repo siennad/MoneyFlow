@@ -1,16 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import * as $ from 'jquery';
+import { Router, NavigationStart, NavigationCancel, NavigationEnd } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit, AfterViewInit {
   title = 'MoneyFlow';
+  loading;
 
-  public ngOnInit()
-  {
+  constructor( private router: Router) {
+    this.loading = true;
+  }
+
+  public ngOnInit() {
     $(document).ready(function() {
       $('button.openbtn').on('click', function() {
         $('#mySidebar').css('width', '250px');
@@ -25,5 +30,18 @@ export class AppComponent {
         return false;
       });
     });
+  }
+
+  ngAfterViewInit() {
+    this.router.events
+            .subscribe((event) => {
+                if (event instanceof NavigationStart) {
+                    this.loading = true;
+                } else if ( event instanceof NavigationEnd ||
+                    event instanceof NavigationCancel
+                    ) {
+                    this.loading = false;
+                }
+            });
   }
 }
