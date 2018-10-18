@@ -14,7 +14,7 @@ import {  MatInputModule, MatSelectModule, MatSnackBarModule,
           MatCardModule, MatButtonModule, MatDatepickerModule,
           MatToolbarModule, MatExpansionModule, MatPaginatorModule,
           MatTableModule, MatTooltipModule,
-          MatNativeDateModule,
+          MatNativeDateModule, MatIconModule
     } from '@angular/material';
 import { MatSortModule } from '@angular/material/sort';
 
@@ -31,6 +31,8 @@ import { ExpenseTrackingComponent } from './expense/expense-tracking/expense-tra
 import { LoginComponent } from './user/login/login.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { RegisterComponent } from './user/register/register.component';
+import { ExpenseReportComponent } from './expense/expense-report/expense-report.component';
+import { ExpenseGraphComponent } from './expense/expense-graph/expense-graph.component';
 
 @NgModule({
   declarations: [
@@ -46,6 +48,8 @@ import { RegisterComponent } from './user/register/register.component';
     LoginComponent,
     PageNotFoundComponent,
     RegisterComponent,
+    ExpenseReportComponent,
+    ExpenseGraphComponent,
   ],
   imports: [
     BrowserModule, BrowserAnimationsModule,
@@ -54,7 +58,7 @@ import { RegisterComponent } from './user/register/register.component';
     // Mat
     MatInputModule, MatSnackBarModule, MatPaginatorModule,
     MatCardModule, MatSelectModule, MatSortModule, MatTooltipModule,
-    MatButtonModule, MatToolbarModule, MatExpansionModule,
+    MatButtonModule, MatToolbarModule, MatExpansionModule, MatIconModule,
     MatDatepickerModule, MatNativeDateModule, MatTableModule,
     // temporary stuffs added here
     StorageServiceModule

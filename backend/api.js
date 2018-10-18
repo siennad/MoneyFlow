@@ -280,10 +280,13 @@ router.post('/get/expense', (req, res) => {
         }
         expenseList.push(item);
       })
-      console.log('fetch data successfully');
       res.status(200).send(expenseList);
     }
   })
 })
+/*
+router.delete('/delete/expense', (req, res) => {
+
+})*/
 
 module.exports = router;

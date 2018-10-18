@@ -13,27 +13,32 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./budget-input.component.css']
 })
 export class BudgetInputComponent implements OnInit {
+
+  value;
+  period;
+  message: any = null;
+  userSub: Subscription;
+  hasValue = false;
+
   constructor( private expenseService: ExpenseService, private userService: UserService ) {
-    this.expenseService.budgetUpdated.subscribe( (data) => {
+    this.expenseService.budgetUpdated.subscribe( () => {
       if (this.expenseService.getBudget() != null) {
         this.hasValue = true; // set for form (update or add new)
       }
       this.value = this.expenseService.getBudgetValue();
       this.period = this.expenseService.getBudgetPeriod();
     });
-  }
 
-  // value = this.expenseService.getBudgetValue();
-  // period = this.expenseService.getBudgetPeriod();
-  value = this.expenseService.getBudgetValue();
-  period = this.expenseService.getBudgetPeriod();
-  message: any = null;
-  userSub: Subscription;
-  hasValue = false;
+  }
 
   ngOnInit() {
     // tslint:disable-next-line:prefer-const
     this.message = this.expenseService.getBudgetNotify();
+    if (this.expenseService.getBudget() != null) {
+      this.hasValue = true; // set for form (update or add new)
+    }
+    this.value = this.expenseService.getBudgetValue();
+    this.period = this.expenseService.getBudgetPeriod();
   }
 
   onAddBudget(form: NgForm) {
