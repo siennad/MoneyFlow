@@ -31,6 +31,8 @@ import { ExpenseTrackingComponent } from './expense/expense-tracking/expense-tra
 import { LoginComponent } from './user/login/login.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { RegisterComponent } from './user/register/register.component';
+import { ExpenseReportComponent } from './expense/expense-report/expense-report.component';
+import { ExpenseGraphComponent } from './expense/expense-graph/expense-graph.component';
 
 @NgModule({
   declarations: [
@@ -46,6 +48,8 @@ import { RegisterComponent } from './user/register/register.component';
     LoginComponent,
     PageNotFoundComponent,
     RegisterComponent,
+    ExpenseReportComponent,
+    ExpenseGraphComponent,
   ],
   imports: [
     BrowserModule, BrowserAnimationsModule,
