@@ -22,8 +22,6 @@ export class ExpenseService {
         this.sub = this.budgetUpdated.asObservable().subscribe( data => this.budget = data);
         this.sub = this.listUpdate.asObservable().subscribe(data =>  {
           this.expenseList = data;
-          console.log(data);
-          console.log(this.listUpdate.asObservable());
         });
   }
 
@@ -173,10 +171,6 @@ export class ExpenseService {
   }
 
   getBudgetFromdb() {
-    if (!this.userService.loginStatus) {
-      return;
-    }
-
     const userId = this.getCurrentUserId();
 
     this.http.post<Budget>('http://localhost:8080/api/get/budgets', {userid: userId})
@@ -198,11 +192,18 @@ export class ExpenseService {
   }
 
   getBudget(): any {
+    if (!this.userService.getLoginStatus()) {
+      console.log('usr not login from budget');
+      return;
+    }
     // check local var first, if not, check for localstorage, then db
     if (! this.budget) {
+      console.log('no budget atm');
       if (localStorage.getItem('budget') != null) {
+        console.log('budget from storage');
         this.budget = JSON.parse(localStorage.getItem('budget'));
       } else {
+        console.log('budget from db');
         this.budget = this.getBudgetFromdb();
       }
     }
@@ -254,14 +255,9 @@ export class ExpenseService {
 
   // Return in expense list
   getExpenseListFromdb() {
-    if (!this.userService.loginStatus) {
-      return;
-    }
-
     this.http.post('http://localhost:8080/api/get/expense', {budgetid: this.getBudgetId()})
       .subscribe(
         (res) => {
-          console.log(res);
           this.expenseList = res;
           this.listUpdate.next([...this.expenseList]);
           localStorage.setItem('expenseList', JSON.stringify(this.expenseList));
@@ -273,10 +269,19 @@ export class ExpenseService {
   }
 
   getExpenseList() {
+    if (!this.userService.getLoginStatus()) {
+      console.log('usr not login from exp list');
+      return;
+    }
+
     if (!this.expenseList) {
+      console.log('no expense list atm');
+
       if (localStorage.getItem('expenseList') != null) {
+        console.log('exp list in storage');
         this.expenseList = JSON.parse( localStorage.getItem('expenseList') );
       } else {
+        console.log('no list from storage. get from db');
         this.getExpenseListFromdb();
       }
     }
