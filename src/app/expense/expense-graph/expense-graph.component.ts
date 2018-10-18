@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { ExpenseService } from '../../services/expense.service';
 import { Chart } from 'chart.js';
+import { MatTableDataSource} from '@angular/material';
 import * as $ from 'jquery';
 
 @Component({
@@ -20,6 +21,9 @@ export class ExpenseGraphComponent implements OnInit, AfterViewInit {
   chartDataAsObj = [];
   chartShown = false;
   pieChart;
+  dataSource;
+
+  displayedColumns: string[] = ['category', 'value'];
   @ViewChild('chartContainer') chartContainer: ElementRef;
 
   ngAfterViewInit(){
@@ -32,7 +36,7 @@ export class ExpenseGraphComponent implements OnInit, AfterViewInit {
       this.chartDataValue.push(a.ValueExpense.totalSpend);
       this.chartDataAsObj.push({category: a.category, value: a.ValueExpense.totalSpend});
     });    
-    
+    this.dataSource = new MatTableDataSource(this.chartDataAsObj);    
   }
 
   showChart() {
@@ -77,7 +81,7 @@ export class ExpenseGraphComponent implements OnInit, AfterViewInit {
 
   hideChart() {
     this.chartShown = false;
-    $('#chart').hide();
+    $('#chart').fadeOut();
   }
 
 }
