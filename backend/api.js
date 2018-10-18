@@ -7,7 +7,7 @@ const Budget = require('./models/budget');
 const Expense = require('./models/expense');
 
 const mongoose = require('mongoose');
-const db = "mongodb://ducle94:root123@ds042527.mlab.com:42527/moneyflowdb";
+const db = process.env.MONGODB_URI || "mongodb://ducle94:root123@ds042527.mlab.com:42527/moneyflowdb";
 
 mongoose.connect(db, { useNewUrlParser: true }, err => {
     if (err) {

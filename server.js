@@ -24,8 +24,10 @@ app.get('/hello', function(req, res) {
 });
 
 
-app.listen(8080, function() {
-    console.log('Server running on port 8080...');
+var server = app.listen(process.env.PORT || 8080, function() {
+    var port = server.address().port;
+    console.log(server.address());
+    console.log('Server running on port ' + port);
 })
 
 // keep heroku app awake
@@ -33,4 +35,4 @@ app.listen(8080, function() {
 var http = require("http");
 setInterval(function() {
     http.get("http://moneyflow-19101997.herokuapp.com");
-}, 300000); // every 5 minutes (3600000)
+}, 1000000);
