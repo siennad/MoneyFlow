@@ -132,7 +132,7 @@ router.post('/user/verify', (req, res) => {
 
 //add-budget
 router.post('/add/budget', (req, res) => {
-    console.log("add from endpint")
+    console.log("add from endpintexir")
     let budgetData = req.body.budget;
         // modify again the budget obj
     let newbudget = new Budget({
