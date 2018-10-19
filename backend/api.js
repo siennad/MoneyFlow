@@ -132,7 +132,8 @@ router.post('/user/verify', (req, res) => {
 
 //add-budget
 router.post('/add/budget', (req, res) => {
-    let budgetData = res.budget;
+    console.log("add from endpint")
+    let budgetData = req.body.budget;
         // modify again the budget obj
     let newbudget = new Budget({
             _id: new mongoose.Types.ObjectId(),
@@ -170,6 +171,24 @@ router.post('/add/budget', (req, res) => {
     })
 });
 
+router.put('/update/budget/:id', (req, res) => {
+    let budgetid = req.params.id;
+    Budget.findOneAndUpdate({_id: budgetid}, req.body.budget, (err, updatedBudget) => {
+        if (err) { res.status(400).send(err) }
+
+        if(updatedBudget) {
+            let budget = {
+                id: updatedBudget._id,
+                period: updatedBudget.period,
+                amount: updatedBudget.amount,
+                date: updatedBudget.date,
+                expenseList: updatedBudget.expenseList
+            }
+            res.status(200).send(budget);
+        }
+    })
+})
+
 router.get('/get/budgets/:id', (req, res) => {
     let userid = req.params.id;
 
@@ -182,14 +201,17 @@ router.get('/get/budgets/:id', (req, res) => {
             // return only 1st
             // console.log(r.budget);
             (r.budget == []) ? res.status(200).send(null) : {};
-            let budget = {
-                id: r.budget[0]._id,
-                period: r.budget[0].period,
-                amount: r.budget[0].amount,
-                date: r.budget[0].date,
-                expenseList: r.budget[0].expenseList
+            if (r.budget[0]) {
+                let budget = {
+                    id: r.budget[0]._id,
+                    period: r.budget[0].period,
+                    amount: r.budget[0].amount,
+                    date: r.budget[0].date,
+                    expenseList: r.budget[0].expenseList
+                }
+                res.status(200).send(budget);
             }
-            res.status(200).send(budget);
+            
         }
     });
 });
@@ -298,7 +320,7 @@ router.delete('/delete/expense/:id', (req, res) => {
 
         if(item) {
             item.remove();
-            res.status(200).send({success: true});
+            res.status(200).send({success: true, item: item});
         }
     })
 })

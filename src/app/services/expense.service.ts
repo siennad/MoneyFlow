@@ -6,9 +6,15 @@ import { Expense } from '../expense/expense.model';
 import { SESSION_STORAGE, StorageService } from 'angular-webstorage-service';
 import { BehaviorSubject, Subject, Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { User } from '../user/user.model';
 import { environment} from '../../environments/environment';
+
+const httpOptions = {
+  headers: new HttpHeaders({
+    'Content-Type':  'application/json',
+  })
+};
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +22,6 @@ import { environment} from '../../environments/environment';
 export class ExpenseService {
 
   domain = environment.domain;
-
   constructor(@Inject(SESSION_STORAGE) private storage: StorageService,
               public snackBar: MatSnackBar,
               private userService: UserService,
@@ -76,12 +81,18 @@ export class ExpenseService {
   }
 
   updateBudget(budget: Budget, budgetId) {
-    this.http.put<Budget>('http://localhost:8080/api/update/budget', {budget: budget, id: budgetId}).subscribe(
+
+    console.log("update budget");
+
+    this.http.put(this.domain + '/api/update/budget/' + budgetId , {budget: budget}, httpOptions).subscribe(
       res => {
         // console.log(res);
         localStorage.setItem('budget', JSON.stringify(res));
         // SUB subscription for changing
         this.budgetUpdated.next(res);
+        console.log(res);
+        this.notify('Updated budget successfully!');
+
       },
       err => {
         this.notify('Cannot update budget!');
@@ -176,7 +187,7 @@ export class ExpenseService {
   getBudgetFromdb() {
     const userId = this.getCurrentUserId();
 
-    this.http.get(this.domain + '/api/get/budgets' + userId)
+    this.http.get(this.domain + '/api/get/budgets/' + userId)
     .subscribe(
       (data) => {
       this.budgetUpdated.next(data);
@@ -195,7 +206,7 @@ export class ExpenseService {
   }
 
   getBudget(): any {
-    if (!this.userService.getLoginStatus()) {
+    if (!this.getCurrentUserId()) {
       console.log('usr not login from budget');
       return;
     }
@@ -214,16 +225,20 @@ export class ExpenseService {
   }
 
   addBudget(budget: Budget) {
+    console.log("add budget");
     // TODO now save to local storage, later save to server database
-    this.http.post<Budget>(this.domain + '/api/add/budget', {budget: budget, userid: this.getCurrentUserId}).subscribe(
+    this.http.post<Budget>(this.domain + '/api/add/budget/', {budget: budget, userid: this.getCurrentUserId}, httpOptions).subscribe(
       res => {
         localStorage.setItem('budget', JSON.stringify(res));
         this.notify('Budget added successfully!');
         // SUB subscription for changing
         this.budgetInput.next(true);
         this.budgetUpdated.next(res);
+        console.log(res);
+
       },
       err => {
+        console.log(err);
         this.notify('Cannot add budget!');
       }
     );
@@ -272,7 +287,7 @@ export class ExpenseService {
   }
 
   getExpenseList() {
-    if (!this.userService.getLoginStatus()) {
+    if (!this.getBudgetId()) {
       console.log('usr not login from exp list');
       return;
     }
@@ -295,14 +310,17 @@ export class ExpenseService {
     // return null;
     this.http.delete(this.domain + '/api/delete/item' +  itemId)
     .subscribe( (res) => {
-      if (res.success) {
+      console.log(res);
+     /* if (res.success) {
         let i = this.expenseList.indexOf(res.item);
         if (i > -1 ) {
           this.expenseList.splice(i, 1);
         }
         this.listUpdate.next([...this.expenseList]);
         localStorage.setItem('expenseList', JSON.stringify(this.expenseList));
-      }
+      } */
+    }, (err) => {
+      console.log(err)
     });
   }
 
