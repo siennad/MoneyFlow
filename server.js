@@ -1,4 +1,4 @@
-var http = require('http');
+
 var express = require("express");
 var bodyParser = require("body-parser");
 var path = require("path");
@@ -54,4 +54,9 @@ var server = app.listen(process.env.PORT || 8080, function() {
 var http = require("http");
 setInterval(function() {
     http.get("http://moneyflow-19101997.herokuapp.com");
+}, 1000000);
+
+var https = require('https')
+setInterval(function() {
+    https.get("https://moneyflow-19101997.herokuapp.com");
 }, 1000000);
