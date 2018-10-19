@@ -170,8 +170,8 @@ router.post('/add/budget', (req, res) => {
     })
 });
 
-router.post('/get/budgets', (req, res) => {
-    let userid = req.body.userid;
+router.get('/get/budgets/:id', (req, res) => {
+    let userid = req.params.id;
 
     User.findOne({ _id: userid }).populate('budget').exec(function(e, r) {
         if (e) {
@@ -258,8 +258,8 @@ router.post('/add/expense', (req, res) => {
   })
 })
 
-router.post('/get/expense', (req, res) => {
-  let budgetid = req.body.budgetid;
+router.get('/get/expense/:id', (req, res) => {
+  let budgetid = req.params.id;
   // add item to budget
   Budget.findOne({_id: budgetid}).populate('expenseList').exec( (e, budget) => {
     if (e) {
@@ -285,9 +285,22 @@ router.post('/get/expense', (req, res) => {
     }
   })
 })
-/*
-router.delete('/delete/expense', (req, res) => {
 
-})*/
+router.delete('/delete/expense/:id', (req, res) => {
+    if(!req.params.id) {
+        res.status(500).send({message: 'no id provide'})
+    } 
+
+    Expense.findOneAnd({_id: req.params.id}, (err, item) => {
+        if (err) {
+            res.status(400).send(err);
+        }
+
+        if(item) {
+            item.remove();
+            res.status(200).send({success: true});
+        }
+    })
+})
 
 module.exports = router;

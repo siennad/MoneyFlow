@@ -176,7 +176,7 @@ export class ExpenseService {
   getBudgetFromdb() {
     const userId = this.getCurrentUserId();
 
-    this.http.post<Budget>(this.domain + '/api/get/budgets', {userid: userId})
+    this.http.get(this.domain + '/api/get/budgets' + userId)
     .subscribe(
       (data) => {
       this.budgetUpdated.next(data);
@@ -258,7 +258,7 @@ export class ExpenseService {
 
   // Return in expense list
   getExpenseListFromdb() {
-    this.http.post( this.domain + '/api/get/expense', {budgetid: this.getBudgetId()})
+    this.http.get( this.domain + '/api/get/expense/'+ this.getBudgetId())
       .subscribe(
         (res) => {
           this.expenseList = res;
@@ -292,8 +292,18 @@ export class ExpenseService {
   }
 
   deleteItem(itemId) {
-    return null;
-    this.http.post('http://localhost:8080/api/delete/item', {id: itemId});
+    // return null;
+    this.http.delete(this.domain + '/api/delete/item' +  itemId)
+    .subscribe( (res) => {
+      if (res.success) {
+        let i = this.expenseList.indexOf(res.item);
+        if (i > -1 ) {
+          this.expenseList.splice(i, 1);
+        }
+        this.listUpdate.next([...this.expenseList]);
+        localStorage.setItem('expenseList', JSON.stringify(this.expenseList));
+      }
+    });
   }
 
   getListUpdateListener() {
