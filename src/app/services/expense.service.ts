@@ -8,11 +8,14 @@ import { BehaviorSubject, Subject, Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { User } from '../user/user.model';
+import { environment} from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ExpenseService {
+
+  domain = environment.domain;
 
   constructor(@Inject(SESSION_STORAGE) private storage: StorageService,
               public snackBar: MatSnackBar,
@@ -173,7 +176,7 @@ export class ExpenseService {
   getBudgetFromdb() {
     const userId = this.getCurrentUserId();
 
-    this.http.post<Budget>('/api/get/budgets', {userid: userId})
+    this.http.post<Budget>(this.domain + '/api/get/budgets', {userid: userId})
     .subscribe(
       (data) => {
       this.budgetUpdated.next(data);
@@ -212,7 +215,7 @@ export class ExpenseService {
 
   addBudget(budget: Budget) {
     // TODO now save to local storage, later save to server database
-    this.http.post<Budget>('/api/add/budget', {budget: budget, userid: this.getCurrentUserId}).subscribe(
+    this.http.post<Budget>(this.domain + '/api/add/budget', {budget: budget, userid: this.getCurrentUserId}).subscribe(
       res => {
         localStorage.setItem('budget', JSON.stringify(res));
         this.notify('Budget added successfully!');
@@ -237,7 +240,7 @@ export class ExpenseService {
     this.expenseList = this.getExpenseList();
     // get from local storage and then save to var
     // this.expenseList = this.getExpenseList();
-    this.http.post<Expense>('/api/add/expense', {expenseitem: item, budgetid: this.getBudgetId()})
+    this.http.post<Expense>(this.domain + '/api/add/expense', {expenseitem: item, budgetid: this.getBudgetId()})
       .subscribe(
         (res) => {
           console.log(res);
@@ -255,7 +258,7 @@ export class ExpenseService {
 
   // Return in expense list
   getExpenseListFromdb() {
-    this.http.post('/api/get/expense', {budgetid: this.getBudgetId()})
+    this.http.post( this.domain + '/api/get/expense', {budgetid: this.getBudgetId()})
       .subscribe(
         (res) => {
           this.expenseList = res;

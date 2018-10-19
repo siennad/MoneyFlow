@@ -6,11 +6,13 @@ import { HttpClient } from '@angular/common/http';
 /*import { HttpInterceptor } from '@angular/common/http';*/
 import { User } from '../user/user.model';
 import { stringify } from '@angular/core/src/util';
+import { environment} from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
+  domain = environment.domain;
 
   public loginStatus: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this.getLoginStatus());
   public userLog;
@@ -37,7 +39,7 @@ export class UserService {
   }
 
   addUser(user) {
-    this.http.post<any>('/api/user/add', {user : user} ).subscribe(
+    this.http.post<any>(this.domain + '/api/user/add', {user : user} ).subscribe(
       res => {
         localStorage.setItem('token', res.token);
         localStorage.setItem('user', JSON.stringify(res.userLogged));
@@ -49,7 +51,7 @@ export class UserService {
   }
 
   verifyUser(user) {
-    this.http.post<any>('/api/user/verify', {user: user}).subscribe(
+    this.http.post<any>(this.domain + '/api/user/verify', {user: user}).subscribe(
       res => {
         localStorage.setItem('token', res.token);
         localStorage.setItem('user', JSON.stringify(res.userLogged));
