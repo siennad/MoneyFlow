@@ -21,6 +21,7 @@ const httpOptions = {
 })
 export class ExpenseService {
 
+  // domain = process.env.domain;
   domain = environment.domain;
   constructor(@Inject(SESSION_STORAGE) private storage: StorageService,
               public snackBar: MatSnackBar,
@@ -86,13 +87,15 @@ export class ExpenseService {
 
     this.http.put(this.domain + '/api/update/budget/' + budgetId , {budget: budget}, httpOptions).subscribe(
       res => {
+        console.log(localStorage.getItem('budget'));
+
         // console.log(res);
         localStorage.setItem('budget', JSON.stringify(res));
+        console.log(localStorage.getItem('budget'));
         // SUB subscription for changing
         this.budgetUpdated.next(res);
         console.log(res);
         this.notify('Updated budget successfully!');
-
       },
       err => {
         this.notify('Cannot update budget!');
@@ -235,7 +238,6 @@ export class ExpenseService {
         this.budgetInput.next(true);
         this.budgetUpdated.next(res);
         console.log(res);
-
       },
       err => {
         console.log(err);
