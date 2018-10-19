@@ -17,7 +17,7 @@ app.use(bodyParser.json());
 // app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/api', api);
-
+/*
 // If an incoming request uses
 // a protocol other than HTTPS,
 // redirect that request to the
@@ -35,7 +35,7 @@ const forceSSL = function() {
   // Instruct the app
   // to use the forceSSL
   // middleware
-  app.use(forceSSL());
+  app.use(forceSSL());*/
 
 // testing server
 app.get('/hello', function(req, res) {
@@ -53,5 +53,5 @@ var server = app.listen(process.env.PORT || 8080, function() {
 
 var http = require("http");
 setInterval(function() {
-    http.get("https://moneyflow-19101997.herokuapp.com");
+    http.get("http://moneyflow-19101997.herokuapp.com");
 }, 1000000);
