@@ -12,7 +12,7 @@ import { environment} from '../../environments/environment';
   providedIn: 'root'
 })
 export class UserService {
-  domain = environment.domain;
+  domain = null; // environment.domain;
 
   public loginStatus: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this.getLoginStatus());
   public userLog;
