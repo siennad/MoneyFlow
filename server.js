@@ -2,6 +2,7 @@
 var express = require("express");
 var bodyParser = require("body-parser");
 var path = require("path");
+var outputPath = path.join(__dirname, 'dist');
 
 const cors = require('cors');
 //const password_hash = require('password-hash');
@@ -11,7 +12,7 @@ const app = express();
 
 app.use(cors());
 
-app.use(express.static(path.join(__dirname, 'dist')));
+app.use(express.static(outputPath));
 
 app.use(bodyParser.json());
 // app.use(bodyParser.urlencoded({ extended: true }));
@@ -38,6 +39,10 @@ const forceSSL = function() {
   app.use(forceSSL());*/
 
 // testing server
+app.get('*', (req, res) => {
+  res.sendFile(path.join(outputPath, 'index.html'));
+});
+
 app.get('/hello', function(req, res) {
     res.send('<h1> Hello there, I am working! </h1>');
 });
