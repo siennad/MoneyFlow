@@ -16,7 +16,7 @@ mongoose.connect(db, { useNewUrlParser: true }, err => {
         console.log('connected to database MongoDB');
     }
 });
-
+//some comments for testing w SG
 /* TEST FUNCTIONS */
 router.get('/', (req, res) => {
     res.send('From API route')
@@ -211,7 +211,7 @@ router.get('/get/budgets/:id', (req, res) => {
                 }
                 res.status(200).send(budget);
             }
-            
+
         }
     });
 });
@@ -311,7 +311,7 @@ router.get('/get/expense/:id', (req, res) => {
 router.delete('/delete/expense/:id', (req, res) => {
     if(!req.params.id) {
         res.status(500).send({message: 'no id provide'})
-    } 
+    }
 
     Expense.findOneAnd({_id: req.params.id}, (err, item) => {
         if (err) {

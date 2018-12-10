@@ -53,7 +53,6 @@ var server = app.listen(process.env.PORT || 8080, function() {
     console.log(server.address());
     console.log('Server running on port ' + port);
 })
-
 // keep heroku app awake
 var https = require('https')
 setInterval(function() {
