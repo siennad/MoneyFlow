@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  production: true,
+  domain: 'https://moneyflow-19101997.herokuapp.com'
 };

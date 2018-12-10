@@ -21,8 +21,8 @@ const httpOptions = {
 })
 export class ExpenseService {
 
-  // domain = process.env.domain;
-  domain = ''; // environment.domain;
+  
+  domain = environment.domain; // '';
   constructor(@Inject(SESSION_STORAGE) private storage: StorageService,
               public snackBar: MatSnackBar,
               private userService: UserService,
