@@ -10,4 +10,6 @@ This project using MEAN stack: MongoDB to store data (from mLab), Express, Angul
 
 --- 
 Upcoming features:
-1. The date of expire will be sent 
+1. The date of expire will be sent to your email
+2. User can update their profile
+3. User can set the budget for fixed term
