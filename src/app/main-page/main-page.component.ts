@@ -17,7 +17,13 @@ export class MainPageComponent implements OnInit {
       }
     });
   }
+  
   ngOnInit() {
+    console.log(this.exampleFunc(1,2));
+  }
+  
+  exampleFunc(a, b) {
+    return a+b
   }
 
 }
